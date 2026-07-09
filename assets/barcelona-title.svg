@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220" role="img" aria-labelledby="title desc">
+  <title id="title">Barcelona Urban Life Signals</title>
+  <desc id="desc">A Barcelona Modernisme-inspired title with Eixample geometry and mosaic details.</desc>
+
+  <defs>
+    <pattern id="tiles" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#f5e8cf"/>
+      <path d="M20 2 38 20 20 38 2 20Z" fill="none" stroke="#c85d3c" stroke-width="2"/>
+      <circle cx="20" cy="20" r="5" fill="#187b76"/>
+      <path d="M0 0h8v8H0zm32 32h8v8h-8z" fill="#e3a72f"/>
+    </pattern>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffaf0"/>
+      <stop offset="1" stop-color="#f4e6cc"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-20%" width="120%" height="150%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#253a3d" flood-opacity=".16"/>
+    </filter>
+  </defs>
+
+  <rect x="3" y="3" width="1194" height="214" rx="26" fill="url(#paper)" stroke="#173f43" stroke-width="6"/>
+
+  <!-- Modernisme window forms -->
+  <path d="M34 184V75C34 42 57 23 87 23s53 19 53 52v109" fill="url(#tiles)" stroke="#173f43" stroke-width="4"/>
+  <path d="M1060 184V75c0-33 23-52 53-52s53 19 53 52v109" fill="url(#tiles)" stroke="#173f43" stroke-width="4"/>
+  <path d="M53 184V80c0-23 14-36 34-36s34 13 34 36v104" fill="#187b76" opacity=".9"/>
+  <path d="M1079 184V80c0-23 14-36 34-36s34 13 34 36v104" fill="#c85d3c" opacity=".9"/>
+
+  <!-- Eixample block corners -->
+  <g fill="none" stroke="#e3a72f" stroke-width="4" opacity=".95">
+    <path d="M170 40h32l12 12v32"/>
+    <path d="M1030 40h-32l-12 12v32"/>
+    <path d="M170 180h32l12-12v-32"/>
+    <path d="M1030 180h-32l-12-12v-32"/>
+  </g>
+
+  <g text-anchor="middle" filter="url(#softShadow)">
+    <text x="600" y="92" fill="#173f43"
+          font-family="Georgia, 'Times New Roman', serif"
+          font-size="63" font-weight="700" letter-spacing="8">BARCELONA</text>
+    <text x="600" y="151" fill="#a94732"
+          font-family="'Trebuchet MS', Arial, sans-serif"
+          font-size="39" font-weight="700" letter-spacing="3">URBAN LIFE SIGNALS</text>
+  </g>
+
+  <!-- Mosaic signal line -->
+  <g transform="translate(374 178)">
+    <rect width="452" height="13" rx="6.5" fill="#173f43"/>
+    <circle cx="22" cy="6.5" r="6.5" fill="#e3a72f"/>
+    <circle cx="67" cy="6.5" r="6.5" fill="#c85d3c"/>
+    <circle cx="112" cy="6.5" r="6.5" fill="#187b76"/>
+    <path d="M140 7h38l13-5 18 9 20-7 17 3h38l15-5 17 9 20-7 18 3h118"
+          fill="none" stroke="#f5e8cf" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
