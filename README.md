@@ -31,16 +31,20 @@ channels, and periods.
 
 The first dataset is now in place: 287,304 IRIS records from the 2025 resource
 published by Open Data BCN. The initial inspection found 25 columns, substantial
-missingness in geographic fields, and 3,393 exact duplicate rows. These are
-observations to investigate, not cleaning decisions made in advance.
+missingness in geographic fields, and 3,393 exact duplicate rows.
 
-The current milestone is to understand:
+The first data-quality pass is documented in `reports/`. The 2025 export looks
+closure-year oriented: all closure dates are in 2025, while some requests were
+registered before 2025. Repeated `FITXA_ID` values currently disappear after
+exact de-duplication, so the first processed dataset removes exact duplicate
+rows only and keeps the missing geography visible.
 
-- what each observed field represents;
-- why some records have no geographic information;
-- whether the exact duplicates are data-quality issues or valid records;
-- the true registration and closure date coverage;
-- which request classifications are consistent enough for analysis.
+The current work is to prepare a careful first analysis dataset:
+
+- preserve registration and closure dates separately;
+- keep reported-demand analysis based on registration date;
+- avoid imputing missing geography;
+- document any category normalisation before applying it.
 
 Weather integration, regression, seasonal analysis, anomaly detection, and an
 application come after this data-quality work.
@@ -86,6 +90,52 @@ Inspect the downloaded CSV without assuming any column names:
 python -m src.inspect_data data/raw/FILENAME.csv
 ```
 
+Create the first focused IRIS profile after the raw schema is known:
+
+```bash
+python -m src.profile_iris data/raw/FILENAME.csv
+```
+
+This writes a Markdown profile to `reports/iris_profile.md` and a reproducible
+daily request-count file to `data/processed/iris_daily_requests.csv`. The daily
+file is generated output and is not committed.
+
+Investigate the first data-quality questions:
+
+```bash
+python -m src.investigate_iris_quality data/raw/FILENAME.csv
+```
+
+This writes `reports/iris_quality_notes.md`, including duplicate `FITXA_ID`
+checks and registration-versus-closure timing.
+
+Prepare the first conservative analysis dataset:
+
+```bash
+python -m src.prepare_iris_dataset data/raw/FILENAME.csv
+```
+
+This writes `data/processed/iris_2025_clean.csv` and
+`reports/iris_prepare_summary.md`. The processed CSV is generated output and is
+not committed.
+
+Create the first visual signal outputs:
+
+```bash
+python -m src.explore_iris_signals
+```
+
+This writes `reports/iris_signal_summary.md` and generated PNG charts under
+`reports/figures/`. The figures are reproducible output and are not committed.
+
+Current tracked notes:
+
+- `reports/iris_catalog.md` records the selected Open Data BCN resource.
+- `reports/iris_profile.md` records the first schema and distribution profile.
+- `reports/iris_quality_notes.md` records duplicate and timing checks.
+- `reports/iris_prepare_summary.md` records the first preparation checks.
+- `reports/iris_signal_summary.md` records the first visual signal readings.
+
 If the portal is unavailable, open the
 [IRIS dataset page](https://opendata-ajuntament.barcelona.cat/data/en/dataset/iris)
 and place a downloaded CSV in `data/raw/`, then run the same inspection command.
@@ -99,10 +149,15 @@ and place a downloaded CSV in `data/raw/`, then run the same inspection command.
 │   └── processed/    # reproducible analysis-ready outputs; ignored by Git
 ├── notebooks/        # exploratory notebooks, added when the schema is known
 ├── reports/
-│   └── figures/      # exported charts
+│   ├── figures/      # exported charts
+│   └── *.md          # tracked data-understanding notes
 ├── src/
 │   ├── data_catalog.py
-│   └── inspect_data.py
+│   ├── explore_iris_signals.py
+│   ├── investigate_iris_quality.py
+│   ├── inspect_data.py
+│   ├── prepare_iris_dataset.py
+│   └── profile_iris.py
 ├── AGENTS.md
 ├── PROJECT_PLAN.md
 ├── README.md
