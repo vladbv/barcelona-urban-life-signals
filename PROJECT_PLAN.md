@@ -59,26 +59,31 @@ Initial Milestone 2 output:
 - `reports/iris_signal_summary.md` records first visible signal readings.
 - `reports/figures/` contains generated charts for daily volume, weekday
   rhythm, request areas, and district/missing-geography distribution.
+- `streamlit_app.py` provides the first local interface over the processed
+  dataset.
 
 ## Milestone 3 — Explore urban patterns
 
-- Establish request-volume trends and calendar seasonality.
-- Compare meaningful geographic or request groupings supported by the data.
-- Examine civic behaviour carefully, including possible reporting bias.
-- Produce clear static charts and document findings and caveats.
+- [x] Establish first request-volume trends and weekday rhythm.
+- [ ] Compare meaningful geographic or request groupings supported by the data.
+- [ ] Examine civic behaviour carefully, including possible reporting bias.
+- [x] Produce clear static charts and document findings and caveats.
+- [x] Add a first local interface for filtering and reading the processed data.
 
 ## Milestone 4 — Add weather context
 
 - Select a reliable Barcelona weather source and align its time resolution.
 - Test relationships with transparent summaries and regression baselines.
 - Distinguish association from causal claims.
+- After weather and seasonality baselines exist, add dated policy/event context
+  from Barcelona, Catalunya, and Spain as documented external variables.
 
 ## Later, only after the evidence supports it
 
 - anomaly detection;
 - time-aware predictive baselines and model evaluation;
 - city-activity or event data;
-- a small Streamlit application.
+- richer application polish and deployment.
 
 Advanced modelling is not a prerequisite. Each later addition must answer a
 specific question better than a simpler analysis.

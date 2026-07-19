@@ -39,15 +39,46 @@ registered before 2025. Repeated `FITXA_ID` values currently disappear after
 exact de-duplication, so the first processed dataset removes exact duplicate
 rows only and keeps the missing geography visible.
 
-The current work is to prepare a careful first analysis dataset:
+The current work is to turn that careful dataset into visible signals:
 
-- preserve registration and closure dates separately;
-- keep reported-demand analysis based on registration date;
-- avoid imputing missing geography;
+- use registration date for reported-demand rhythm;
+- keep missing geography visible instead of smoothing it away;
+- separate reporting patterns from claims about real-world causation;
 - document any category normalisation before applying it.
 
-Weather integration, regression, seasonal analysis, anomaly detection, and an
-application come after this data-quality work.
+Weather integration, regression, seasonal analysis, anomaly detection, and
+policy/event context come after this first civic-signal layer.
+
+## First visible signals
+
+These charts are generated from the processed 2025 IRIS dataset. They describe
+reported citizen activity, not complete city conditions.
+
+![Daily reported citizen activity with a 7-day average](reports/figures/iris_daily_registration_volume.png)
+
+The daily view shows a strong weekly pulse and a clear rise through the active
+2025 reporting period. Because the source file is closure-year oriented, older
+registration dates appear at the beginning and should not be read as complete
+daily demand for 2023 or 2024.
+
+![Reported activity by weekday](reports/figures/iris_weekday_pattern.png)
+
+Weekday volume is part of the civic behaviour signal. It can reflect when
+people report issues, when channels are used, and how municipal workflows
+surface records. This matters before treating any peak as a city-pressure
+event.
+
+![Top reported request areas](reports/figures/iris_top_request_areas.png)
+
+Cleaning and public-space maintenance dominate the first view. That gives the
+project a practical starting point: public-space pressure is visible enough to
+analyse before introducing weather or policy variables.
+
+![District distribution including missing geography](reports/figures/iris_district_distribution.png)
+
+Missing geography is large enough to be a finding, not an inconvenience.
+District comparisons should therefore be framed as comparisons among records
+with usable place information.
 
 ## Setup
 
@@ -126,7 +157,17 @@ python -m src.explore_iris_signals
 ```
 
 This writes `reports/iris_signal_summary.md` and generated PNG charts under
-`reports/figures/`. The figures are reproducible output and are not committed.
+`reports/figures/`. The README figures are committed; other generated figures
+remain ignored.
+
+Run the first local interface:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The interface expects `data/processed/iris_2025_clean.csv` to exist locally. If
+it is missing, run the preparation command above first.
 
 Current tracked notes:
 
@@ -161,18 +202,15 @@ and place a downloaded CSV in `data/raw/`, then run the same inspection command.
 ├── AGENTS.md
 ├── PROJECT_PLAN.md
 ├── README.md
+├── streamlit_app.py
 └── requirements.txt
 ```
 
 ## Stack
 
-The initial stack is intentionally ordinary: Python, pandas, NumPy,
-matplotlib, scikit-learn, and Jupyter. These tools cover data inspection,
-analysis, visualisation, and later baseline modelling without adding
-infrastructure early.
-
-Streamlit is a possible presentation layer later, once there is a stable
-processed dataset and a clear set of findings. It is not part of the current
-environment.
+The stack is intentionally ordinary: Python, pandas, NumPy, matplotlib,
+scikit-learn, Jupyter, and Streamlit. pandas/NumPy handle preparation,
+matplotlib generates reproducible static figures, scikit-learn is reserved for
+later baseline modelling, and Streamlit provides the first local interface.
 
 See [PROJECT_PLAN.md](PROJECT_PLAN.md) for the phased scope.

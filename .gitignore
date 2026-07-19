@@ -11,3 +11,7 @@ data/processed/*
 !data/processed/.gitkeep
 reports/figures/*
 !reports/figures/.gitkeep
+!reports/figures/iris_daily_registration_volume.png
+!reports/figures/iris_weekday_pattern.png
+!reports/figures/iris_top_request_areas.png
+!reports/figures/iris_district_distribution.png
