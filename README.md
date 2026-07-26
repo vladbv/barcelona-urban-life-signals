@@ -80,6 +80,34 @@ Missing geography is large enough to be a finding, not an inconvenience.
 District comparisons should therefore be framed as comparisons among records
 with usable place information.
 
+![Closure lag histogram](reports/figures/iris_closure_lag_histogram.png)
+
+Most requests close quickly: the median closure lag is 4 days. The 95th
+percentile is 34 days, but the maximum observed lag is 580 days, so resolution
+time has a long tail. The chart is clipped at 60 days to keep the main pattern
+readable.
+
+![Daily volume versus median closure lag](reports/figures/iris_daily_volume_vs_closure_lag.png)
+
+On active days, daily request volume and median closure lag have a correlation
+of -0.53. That is an association to investigate, not a causal claim. It may
+reflect the mix of request types, short-cycle operational categories, or the
+fact that this file is organised by closure year.
+
+![Month and weekday heatmap](reports/figures/iris_month_weekday_heatmap.png)
+
+The heatmap shows how reporting rhythm changes across both month and weekday.
+Weekends are consistently lower, while parts of summer and early autumn stand
+out on working days. This is the kind of structure that should be handled before
+forecasting or anomaly detection.
+
+![Request-area volume versus median closure lag](reports/figures/iris_area_volume_vs_lag.png)
+
+Request areas differ not only by volume but also by median closure time. This
+plot is useful for deciding where a later model should compare like with like:
+cleaning requests, municipal procedure questions, mobility issues, and safety
+complaints are not the same operational process.
+
 ## Setup
 
 Python 3.11 is recommended.
@@ -163,11 +191,18 @@ remain ignored.
 Run the first local interface:
 
 ```bash
-streamlit run streamlit_app.py
+python -m streamlit run streamlit_app.py
 ```
 
 The interface expects `data/processed/iris_2025_clean.csv` to exist locally. If
 it is missing, run the preparation command above first.
+
+If your terminal is not using the project virtual environment, use the explicit
+venv command instead:
+
+```bash
+.venv/bin/python -m streamlit run streamlit_app.py
+```
 
 Current tracked notes:
 

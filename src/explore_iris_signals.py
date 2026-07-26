@@ -167,14 +167,205 @@ def save_district_chart(frame: pd.DataFrame, figures_dir: Path) -> Path:
     return output_path
 
 
+def save_closure_lag_histogram(frame: pd.DataFrame, figures_dir: Path) -> Path:
+    lag_days = frame["closure_lag_days"].dropna()
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.hist(
+        lag_days.clip(upper=60),
+        bins=30,
+        color="#8C2F39",
+        alpha=0.82,
+        edgecolor="white",
+    )
+    ax.set_title("Closure lag distribution, clipped at 60 days")
+    ax.set_xlabel("Days between registration and closure")
+    ax.set_ylabel("Requests")
+    ax.grid(axis="y", alpha=0.25)
+    ax.text(
+        0.98,
+        0.86,
+        f"Median: {int(lag_days.median())} days\n95th pct: {int(lag_days.quantile(0.95))} days\nMax: {int(lag_days.max())} days",
+        transform=ax.transAxes,
+        ha="right",
+        va="top",
+        bbox={"boxstyle": "round,pad=0.5", "facecolor": "#FFF8EF", "edgecolor": "#D8BFA6"},
+    )
+    fig.tight_layout()
+
+    output_path = figures_dir / "iris_closure_lag_histogram.png"
+    fig.savefig(output_path, dpi=160)
+    plt.close(fig)
+    return output_path
+
+
+def daily_metrics(frame: pd.DataFrame) -> pd.DataFrame:
+    return (
+        frame.groupby("registration_date")
+        .agg(
+            requests=("fitxa_id", "count"),
+            median_closure_lag_days=("closure_lag_days", "median"),
+            missing_district_percent=("district", lambda values: values.isna().mean() * 100),
+        )
+        .reset_index()
+        .sort_values("registration_date")
+    )
+
+
+def save_daily_volume_lag_scatter(frame: pd.DataFrame, figures_dir: Path) -> Path:
+    daily = daily_metrics(frame)
+    active_days = daily.loc[daily["requests"] >= 25].copy()
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+    scatter = ax.scatter(
+        active_days["requests"],
+        active_days["median_closure_lag_days"],
+        c=active_days["missing_district_percent"],
+        cmap="viridis",
+        s=34,
+        alpha=0.78,
+        edgecolor="white",
+        linewidth=0.35,
+    )
+    ax.set_title("Daily volume versus median closure lag")
+    ax.set_xlabel("Requests registered that day")
+    ax.set_ylabel("Median closure lag, days")
+    ax.grid(alpha=0.25)
+    colorbar = fig.colorbar(scatter, ax=ax)
+    colorbar.set_label("Missing district, %")
+    fig.tight_layout()
+
+    output_path = figures_dir / "iris_daily_volume_vs_closure_lag.png"
+    fig.savefig(output_path, dpi=160)
+    plt.close(fig)
+    return output_path
+
+
+def save_month_weekday_heatmap(frame: pd.DataFrame, figures_dir: Path) -> Path:
+    active_2025 = frame.loc[frame["registration_date"].dt.year == 2025].copy()
+    active_2025["month"] = active_2025["registration_date"].dt.strftime("%b")
+    active_2025["weekday"] = active_2025["registration_date"].dt.day_name()
+
+    weekday_order = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
+    month_order = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
+    heatmap = (
+        active_2025.pivot_table(
+            index="weekday",
+            columns="month",
+            values="fitxa_id",
+            aggfunc="count",
+            fill_value=0,
+        )
+        .reindex(index=weekday_order, columns=month_order)
+        .fillna(0)
+        .astype(int)
+    )
+
+    fig, ax = plt.subplots(figsize=(11, 5.5))
+    image = ax.imshow(heatmap.values, cmap="YlOrBr", aspect="auto")
+    ax.set_title("2025 registration rhythm by month and weekday")
+    ax.set_xticks(range(len(month_order)), month_order)
+    ax.set_yticks(range(len(weekday_order)), weekday_order)
+    colorbar = fig.colorbar(image, ax=ax)
+    colorbar.set_label("Requests")
+
+    for row_index, weekday in enumerate(weekday_order):
+        for column_index, month in enumerate(month_order):
+            value = int(heatmap.loc[weekday, month])
+            ax.text(
+                column_index,
+                row_index,
+                f"{value // 1000}k" if value >= 1000 else str(value),
+                ha="center",
+                va="center",
+                color="#2F241D",
+                fontsize=8,
+            )
+    fig.tight_layout()
+
+    output_path = figures_dir / "iris_month_weekday_heatmap.png"
+    fig.savefig(output_path, dpi=160)
+    plt.close(fig)
+    return output_path
+
+
+def save_area_volume_lag_scatter(frame: pd.DataFrame, figures_dir: Path) -> Path:
+    area_metrics = (
+        frame.groupby("area")
+        .agg(
+            requests=("fitxa_id", "count"),
+            median_closure_lag_days=("closure_lag_days", "median"),
+        )
+        .sort_values("requests", ascending=False)
+        .head(12)
+        .reset_index()
+    )
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(
+        area_metrics["requests"],
+        area_metrics["median_closure_lag_days"],
+        s=(area_metrics["requests"] / area_metrics["requests"].max()) * 650 + 80,
+        color="#174C5E",
+        alpha=0.72,
+        edgecolor="white",
+        linewidth=0.8,
+    )
+    for _, row in area_metrics.iterrows():
+        ax.annotate(
+            row["area"],
+            (row["requests"], row["median_closure_lag_days"]),
+            xytext=(6, 4),
+            textcoords="offset points",
+            fontsize=8,
+        )
+    ax.set_title("Top request areas: volume versus median closure lag")
+    ax.set_xlabel("Requests")
+    ax.set_ylabel("Median closure lag, days")
+    ax.grid(alpha=0.25)
+    fig.tight_layout()
+
+    output_path = figures_dir / "iris_area_volume_vs_lag.png"
+    fig.savefig(output_path, dpi=160)
+    plt.close(fig)
+    return output_path
+
+
 def build_report(frame: pd.DataFrame, figure_paths: list[Path]) -> str:
     daily = frame.groupby("registration_date").size()
+    daily_signal = daily_metrics(frame)
+    active_daily_signal = daily_signal.loc[daily_signal["requests"] >= 25]
+    volume_lag_corr = active_daily_signal["requests"].corr(
+        active_daily_signal["median_closure_lag_days"]
+    )
     weekday = (
         frame.assign(weekday=frame["registration_date"].dt.day_name())
         .groupby("weekday")
         .size()
         .sort_values(ascending=False)
     )
+    lag_days = frame["closure_lag_days"].dropna()
 
     return "\n\n".join(
         [
@@ -198,6 +389,12 @@ def build_report(frame: pd.DataFrame, figure_paths: list[Path]) -> str:
                 f"- Top request area: "
                 f"{frame['area'].value_counts().index[0]}"
             ),
+            f"- Median closure lag: {int(lag_days.median())} days",
+            f"- 95th percentile closure lag: {int(lag_days.quantile(0.95))} days",
+            (
+                "- Correlation between daily request volume and median closure "
+                f"lag on active days: {volume_lag_corr:.2f}"
+            ),
             "## Figures",
             "\n".join(f"- `{path}`" for path in figure_paths),
             "## Notes",
@@ -214,6 +411,10 @@ def build_report(frame: pd.DataFrame, figure_paths: list[Path]) -> str:
                 "- Category language variants are not normalised yet, so request "
                 "type comparisons should wait until that decision is documented."
             ),
+            (
+                "- Scatter plots show association surfaces for follow-up "
+                "questions; they are not causal estimates."
+            ),
         ]
     )
 
@@ -228,6 +429,10 @@ def main() -> int:
         save_weekday_chart(frame, args.figures_dir),
         save_top_areas_chart(frame, args.figures_dir),
         save_district_chart(frame, args.figures_dir),
+        save_closure_lag_histogram(frame, args.figures_dir),
+        save_daily_volume_lag_scatter(frame, args.figures_dir),
+        save_month_weekday_heatmap(frame, args.figures_dir),
+        save_area_volume_lag_scatter(frame, args.figures_dir),
     ]
 
     report = build_report(frame, figure_paths)

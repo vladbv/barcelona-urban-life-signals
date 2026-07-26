@@ -58,16 +58,19 @@ Initial Milestone 2 output:
 - `reports/iris_prepare_summary.md` records the preparation checks.
 - `reports/iris_signal_summary.md` records first visible signal readings.
 - `reports/figures/` contains generated charts for daily volume, weekday
-  rhythm, request areas, and district/missing-geography distribution.
+  rhythm, request areas, district/missing-geography distribution, closure lag,
+  daily volume versus lag, month/weekday seasonality, and area-level volume
+  versus lag.
 - `streamlit_app.py` provides the first local interface over the processed
   dataset.
 
 ## Milestone 3 — Explore urban patterns
 
 - [x] Establish first request-volume trends and weekday rhythm.
-- [ ] Compare meaningful geographic or request groupings supported by the data.
+- [x] Add first request-area comparisons using volume and median closure lag.
+- [ ] Compare meaningful geographic groupings supported by the data.
 - [ ] Examine civic behaviour carefully, including possible reporting bias.
-- [x] Produce clear static charts and document findings and caveats.
+- [x] Produce clear static charts, histograms, scatter plots, and caveats.
 - [x] Add a first local interface for filtering and reading the processed data.
 
 ## Milestone 4 — Add weather context
