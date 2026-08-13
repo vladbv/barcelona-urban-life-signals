@@ -6,9 +6,11 @@ This is a first visual pass over reported citizen activity. It describes reporti
 
 - Processed rows: 283,911
 
-- Registration-date range: 2023-10-25 to 2025-12-31
+- 2025 registration rows used for headline charts: 278,628
 
-- Median daily requests: 496
+- 2025 registration-date range: 2025-01-01 to 2025-12-31
+
+- Median daily requests: 784
 
 - Highest daily requests: 1,572
 
@@ -16,11 +18,13 @@ This is a first visual pass over reported citizen activity. It describes reporti
 
 - Top request area: Recollida i neteja de l'espai urbà
 
-- Median closure lag: 4 days
+- Median closure lag: 3 days
 
-- 95th percentile closure lag: 34 days
+- 95th percentile closure lag: 32 days
 
-- Correlation between daily request volume and median closure lag on active days: -0.53
+- 2025 records with district information: 68.8%
+
+- Correlation between daily request volume and median closure lag on active days: 0.10
 
 ## Figures
 
@@ -32,13 +36,17 @@ This is a first visual pass over reported citizen activity. It describes reporti
 - `reports/figures/iris_daily_volume_vs_closure_lag.png`
 - `reports/figures/iris_month_weekday_heatmap.png`
 - `reports/figures/iris_area_volume_vs_lag.png`
+- `reports/figures/iris_district_area_mix_heatmap.png`
+- `reports/figures/iris_support_mix_by_area.png`
 
 ## Notes
 
-- Because the 2025 file is closure-year oriented, registration dates before 2025 are visible in the early part of the daily chart.
+- The headline charts focus on records registered in 2025, because the source export is closure-year oriented and contains a small number of older registrations.
 
 - District charts include missing geography explicitly instead of hiding it.
 
 - Category language variants are not normalised yet, so request type comparisons should wait until that decision is documented.
 
 - Scatter plots show association surfaces for follow-up questions; they are not causal estimates.
+
+- Channel-mix charts are reporting-behaviour signals. They may reflect access, habits, and municipal workflow, not only the underlying urban issue.

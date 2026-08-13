@@ -2,7 +2,14 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
+
+LOCAL_CACHE_DIR = Path("data/processed/.cache").resolve()
+MPL_CACHE_DIR = LOCAL_CACHE_DIR / "matplotlib"
+MPL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+os.environ.setdefault("MPLCONFIGDIR", str(MPL_CACHE_DIR))
+os.environ.setdefault("XDG_CACHE_HOME", str(LOCAL_CACHE_DIR))
 
 import pandas as pd
 import streamlit as st
@@ -231,6 +238,63 @@ def volume_lag_scatter(frame: pd.DataFrame) -> None:
     )
 
 
+def district_area_mix(frame: pd.DataFrame) -> None:
+    geocoded = frame.dropna(subset=["district"])
+    if geocoded.empty:
+        st.warning("No district information is available in the current filters.")
+        return
+
+    top_districts = geocoded["district"].value_counts().head(10).index
+    top_areas = geocoded["area"].value_counts().head(8).index
+    focused = geocoded.loc[
+        geocoded["district"].isin(top_districts) & geocoded["area"].isin(top_areas)
+    ]
+    mix = focused.pivot_table(
+        index="district",
+        columns="area",
+        values="fitxa_id",
+        aggfunc="count",
+        fill_value=0,
+    ).reindex(index=top_districts, columns=top_areas)
+    mix = mix.div(mix.sum(axis=1), axis=0).fillna(0) * 100
+    st.dataframe(
+        mix.style.format("{:.1f}%").background_gradient(cmap="YlGnBu"),
+        width="stretch",
+    )
+    st.caption(
+        "Rows are normalised within district, so this compares composition rather than raw district volume."
+    )
+
+
+def support_mix_by_area(frame: pd.DataFrame) -> None:
+    if frame.empty:
+        st.warning("No records match the current filters.")
+        return
+
+    top_areas = frame["area"].value_counts().head(8).index
+    top_supports = frame["support"].value_counts().head(5).index
+    focused = frame.loc[
+        frame["area"].isin(top_areas) & frame["support"].isin(top_supports)
+    ]
+    mix = focused.pivot_table(
+        index="area",
+        columns="support",
+        values="fitxa_id",
+        aggfunc="count",
+        fill_value=0,
+    ).reindex(index=top_areas, columns=top_supports)
+    mix = mix.div(mix.sum(axis=1), axis=0).fillna(0) * 100
+    chart_data = (
+        mix.reset_index()
+        .melt(id_vars="area", var_name="support", value_name="share")
+        .sort_values(["area", "support"])
+    )
+    st.bar_chart(chart_data, x="area", y="share", color="support", height=380)
+    st.caption(
+        "Channel mix is a reporting-behaviour signal. It can reflect access and habits, not only issue volume."
+    )
+
+
 def interpretation(frame: pd.DataFrame) -> None:
     daily = frame.groupby("registration_date").size()
     daily_signal = daily_metrics(frame)
@@ -295,7 +359,7 @@ def main() -> None:
     filtered = filter_frame(frame)
     metric_row(filtered)
 
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs(
         [
             "Daily rhythm",
             "Weekday",
@@ -303,6 +367,8 @@ def main() -> None:
             "Geography",
             "Closure lag",
             "Scatter",
+            "District mix",
+            "Channels",
         ]
     )
     with tab1:
@@ -338,6 +404,12 @@ def main() -> None:
     with tab6:
         st.subheader("Daily volume versus median closure lag")
         volume_lag_scatter(filtered)
+    with tab7:
+        st.subheader("Request-area mix by district")
+        district_area_mix(filtered)
+    with tab8:
+        st.subheader("Reporting-channel mix by request area")
+        support_mix_by_area(filtered)
 
     interpretation(filtered)
 

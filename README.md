@@ -57,9 +57,9 @@ reported citizen activity, not complete city conditions.
 ![Daily reported citizen activity with a 7-day average](reports/figures/iris_daily_registration_volume.png)
 
 The daily view shows a strong weekly pulse and a clear rise through the active
-2025 reporting period. Because the source file is closure-year oriented, older
-registration dates appear at the beginning and should not be read as complete
-daily demand for 2023 or 2024.
+2025 reporting period. The chart focuses on records registered in 2025 because
+the source file is closure-year oriented and contains a small number of older
+registrations.
 
 ![Reported activity by weekday](reports/figures/iris_weekday_pattern.png)
 
@@ -82,24 +82,24 @@ with usable place information.
 
 ![Closure lag histogram](reports/figures/iris_closure_lag_histogram.png)
 
-Most requests close quickly: the median closure lag is 4 days. The 95th
-percentile is 34 days, but the maximum observed lag is 580 days, so resolution
+Most 2025-registered requests close quickly: the median closure lag is 3 days.
+The 95th percentile is 32 days, but the maximum observed lag is 580 days, so resolution
 time has a long tail. The chart is clipped at 60 days to keep the main pattern
 readable.
 
 ![Daily volume versus median closure lag](reports/figures/iris_daily_volume_vs_closure_lag.png)
 
-On active days, daily request volume and median closure lag have a correlation
-of -0.53. That is an association to investigate, not a causal claim. It may
-reflect the mix of request types, short-cycle operational categories, or the
-fact that this file is organised by closure year.
+On active 2025 days, daily request volume and median closure lag have a weak
+correlation of 0.10. That is an association to investigate, not a causal claim.
+It suggests volume alone is probably not enough to explain resolution timing;
+request mix and municipal workflow likely matter.
 
 ![Month and weekday heatmap](reports/figures/iris_month_weekday_heatmap.png)
 
-The heatmap shows how reporting rhythm changes across both month and weekday.
-Weekends are consistently lower, while parts of summer and early autumn stand
-out on working days. This is the kind of structure that should be handled before
-forecasting or anomaly detection.
+The heatmap shows average daily requests by month and weekday. Weekends are
+consistently lower, while parts of summer and early autumn stand out on working
+days. This is the kind of structure that should be handled before forecasting
+or anomaly detection.
 
 ![Request-area volume versus median closure lag](reports/figures/iris_area_volume_vs_lag.png)
 
@@ -107,6 +107,21 @@ Request areas differ not only by volume but also by median closure time. This
 plot is useful for deciding where a later model should compare like with like:
 cleaning requests, municipal procedure questions, mobility issues, and safety
 complaints are not the same operational process.
+
+![Request-area mix by district](reports/figures/iris_district_area_mix_heatmap.png)
+
+Among records with usable district information, cleaning and public-space
+maintenance dominate across most districts, but the balance differs. This is a
+better starting point than ranking districts by raw volume, because raw volume
+can reflect population, footfall, tourism, service density, and reporting
+habits.
+
+![Reporting-channel mix by request area](reports/figures/iris_support_mix_by_area.png)
+
+Reporting channel is part of civic behaviour. A request area dominated by web
+forms is not observed in the same way as one dominated by mobile or telephone
+reports. Later modelling should treat channel mix as a possible reporting-bias
+signal, not just metadata.
 
 ## Setup
 

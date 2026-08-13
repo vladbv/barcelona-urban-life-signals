@@ -19,3 +19,5 @@ reports/figures/*
 !reports/figures/iris_daily_volume_vs_closure_lag.png
 !reports/figures/iris_month_weekday_heatmap.png
 !reports/figures/iris_area_volume_vs_lag.png
+!reports/figures/iris_district_area_mix_heatmap.png
+!reports/figures/iris_support_mix_by_area.png

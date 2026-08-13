@@ -60,7 +60,7 @@ Initial Milestone 2 output:
 - `reports/figures/` contains generated charts for daily volume, weekday
   rhythm, request areas, district/missing-geography distribution, closure lag,
   daily volume versus lag, month/weekday seasonality, and area-level volume
-  versus lag.
+  versus lag, district/request-area mix, and reporting-channel mix.
 - `streamlit_app.py` provides the first local interface over the processed
   dataset.
 
@@ -68,8 +68,10 @@ Initial Milestone 2 output:
 
 - [x] Establish first request-volume trends and weekday rhythm.
 - [x] Add first request-area comparisons using volume and median closure lag.
-- [ ] Compare meaningful geographic groupings supported by the data.
-- [ ] Examine civic behaviour carefully, including possible reporting bias.
+- [x] Compare meaningful geographic groupings supported by records with
+      district information.
+- [x] Examine first civic behaviour signals through reporting-channel mix.
+- [ ] Decide whether reporting-channel mix should become a modelling feature.
 - [x] Produce clear static charts, histograms, scatter plots, and caveats.
 - [x] Add a first local interface for filtering and reading the processed data.
 
