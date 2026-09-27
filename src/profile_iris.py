@@ -97,7 +97,8 @@ def markdown_table(frame: pd.DataFrame) -> str:
     if frame.empty:
         return "_No rows._"
 
-    text_frame = frame.fillna("").astype(str)
+    # Categorical and nullable numeric columns cannot accept an empty-string fill.
+    text_frame = frame.astype(object).where(frame.notna(), "").astype(str)
     headers = list(text_frame.columns)
     rows = text_frame.values.tolist()
     widths = [

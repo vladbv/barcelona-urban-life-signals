@@ -165,7 +165,7 @@ def build_summary(raw_frame: pd.DataFrame, prepared: pd.DataFrame, output_path: 
             "- Removed exact duplicate rows only.",
             "- Parsed registration and closure dates from the observed day/month/year columns.",
             "- Kept both registration and closure dates with explicit names.",
-            "- Added `closure_lag_days` for later resolution-time checks.",
+            "- Added `closure_lag_days` for recorded administrative closure timing, not verified resolution.",
             "- Renamed selected observed columns to stable snake_case names.",
             "## Rules not applied",
             "- No imputation.",

@@ -176,9 +176,10 @@ def build_report(frame: pd.DataFrame, csv_path: Path) -> str:
             "before 2025 but closed during 2025."
         ),
         (
-            "- For first analysis, date choice must be explicit: registration "
-            "date is better for demand/reporting rhythm; closure date is better "
-            "for council resolution timing."
+            "- Registration date describes reporting rhythm within this selected "
+            "export; closure date describes recorded administrative closure, "
+            "not verified resolution. Requests still open or closed in another "
+            "year are absent, so registration counts do not measure complete demand."
         ),
         (
             "- The duplicate rows currently look safe to remove only as exact "

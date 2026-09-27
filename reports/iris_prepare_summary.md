@@ -49,7 +49,7 @@ Processed output: `data/processed/iris_2025_clean.csv`
 
 - Kept both registration and closure dates with explicit names.
 
-- Added `closure_lag_days` for later resolution-time checks.
+- Added `closure_lag_days` for recorded administrative closure timing, not verified resolution.
 
 - Renamed selected observed columns to stable snake_case names.
 

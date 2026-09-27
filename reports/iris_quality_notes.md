@@ -80,6 +80,6 @@ Source file: `data/raw/2025_IRIS_Peticions_Ciutadanes_OpenData.csv`
 
 - The 2025 CSV appears to be organised by closure year, not purely by registration year. That explains why some records were opened before 2025 but closed during 2025.
 
-- For first analysis, date choice must be explicit: registration date is better for demand/reporting rhythm; closure date is better for council resolution timing.
+- Registration date describes reporting rhythm within this selected export; closure date describes recorded administrative closure, not verified resolution. Requests still open or closed in another year are absent, so registration counts do not measure complete demand.
 
 - The duplicate rows currently look safe to remove only as exact duplicates, because repeated `FITXA_ID` values disappear after exact de-duplication. This should be encoded as a reproducible cleaning rule in Milestone 2.
