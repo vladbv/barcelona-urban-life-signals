@@ -13,7 +13,7 @@ for data understanding.
 | Format | CSV |
 | Local raw path | `data/raw/2025_IRIS_Peticions_Ciutadanes_OpenData.csv` |
 | Local file timestamp | 2026-07-09 11:50:24 +0300 |
-| Catalog checked | 2026-07-16 |
+| Catalog checked | 2026-09-27 |
 
 Download URL observed from the live catalog:
 
@@ -23,7 +23,7 @@ https://opendata-ajuntament.barcelona.cat/data/dataset/15b349cd-3d4d-4a62-9ad3-d
 
 ## Why this resource
 
-The 2025 CSV is a stable annual CSV export and is small enough to inspect
+The 2025 CSV is an annual CSV export and is small enough to inspect
 locally. It gives enough volume for date, geography, request-type, and channel
 checks before introducing weather or other context.
 
@@ -33,3 +33,18 @@ The live catalog also exposes CSV and XML resources for multiple years,
 including 2026, 2025, 2024, 2023, and older annual files. The current milestone
 continues with the 2025 CSV only so the schema and limitations can be understood
 before combining years.
+
+## Snapshot verification (2026-09-27)
+
+The live catalog was queried again using `python -m src.data_catalog`; the
+2025 resource ID, name and download URL above remain listed. The existing raw
+download was retained. This verifies resource availability, not byte-for-byte
+equality with the current remote download or completeness of 2025 registrations.
+
+Local raw SHA-256:
+`55e017aae02eec8a0864b6189fe6dcf24664dd2bbb200aea1078594e25380332`.
+
+The processed dataset was reproduced in memory from this raw snapshot and
+matched the existing CSV, allowing for CSV numeric dtype round-tripping.
+Regenerated analysis rules and fingerprints are recorded in
+`iris_analysis_manifest.json`.

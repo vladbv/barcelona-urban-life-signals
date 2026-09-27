@@ -1,0 +1,80 @@
+{
+  "source_dataset_url": "https://opendata-ajuntament.barcelona.cat/data/en/dataset/iris",
+  "resource_id": "efc9fd4d-a812-427c-846d-a086d22012a4",
+  "processed_input": {
+    "path": "data/processed/iris_2025_clean.csv",
+    "sha256": "c8330100f876342f10ec36f83c2e4b1e12e26df27dd4ef2b4643a44956d784fa"
+  },
+  "processed_records": 283911,
+  "headline_records": 278628,
+  "headline_registration_start": "2025-01-01",
+  "headline_registration_end": "2025-12-31",
+  "selection": "The headline cohort contains records registered in 2025 and closed in 2025, as observed in this local export. Requests still open or closed in another year are absent. Late-year volumes and closure lags are therefore selected by the year-end cutoff; this is not a complete count of 2025 demand.",
+  "validation": "Unique nonmissing IDs, valid dates, 2025 closures, nonnegative lags matching dates.",
+  "calendar": "365 calendar days; zero observed records filled as zero; lag stays undefined on empty days; trailing window requires 7 days.",
+  "percentages": "Full displayed-group denominators, with Other / missing for omitted categories.",
+  "category_policy": "Preserve published request_type labels; no unverified language crosswalk.",
+  "versions": {
+    "python": "3.11.5",
+    "pandas": "2.3.3",
+    "matplotlib": "3.11.0"
+  },
+  "tables": {
+    "daily": {
+      "path": "data/processed/summaries/iris_daily.csv",
+      "rows": 365
+    },
+    "weekday": {
+      "path": "data/processed/summaries/iris_weekday.csv",
+      "rows": 7
+    },
+    "monthly": {
+      "path": "data/processed/summaries/iris_monthly.csv",
+      "rows": 12
+    },
+    "areas": {
+      "path": "data/processed/summaries/iris_areas.csv",
+      "rows": 29
+    },
+    "districts": {
+      "path": "data/processed/summaries/iris_districts.csv",
+      "rows": 11
+    },
+    "channels": {
+      "path": "data/processed/summaries/iris_channels.csv",
+      "rows": 16
+    },
+    "request_types": {
+      "path": "data/processed/summaries/iris_request_types.csv",
+      "rows": 12
+    },
+    "request_type_monthly": {
+      "path": "data/processed/summaries/iris_request_type_monthly.csv",
+      "rows": 12
+    },
+    "closure_lag": {
+      "path": "data/processed/summaries/iris_closure_lag.csv",
+      "rows": 7
+    },
+    "district_area_counts": {
+      "path": "data/processed/summaries/iris_district_area_counts.csv",
+      "rows": 10
+    },
+    "district_area_shares": {
+      "path": "data/processed/summaries/iris_district_area_shares.csv",
+      "rows": 10
+    },
+    "area_channel_counts": {
+      "path": "data/processed/summaries/iris_area_channel_counts.csv",
+      "rows": 8
+    },
+    "area_channel_shares": {
+      "path": "data/processed/summaries/iris_area_channel_shares.csv",
+      "rows": 8
+    }
+  },
+  "local_raw_reference": {
+    "path": "data/raw/2025_IRIS_Peticions_Ciutadanes_OpenData.csv",
+    "sha256": "55e017aae02eec8a0864b6189fe6dcf24664dd2bbb200aea1078594e25380332"
+  }
+}

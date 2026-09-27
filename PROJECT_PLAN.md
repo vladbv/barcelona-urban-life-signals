@@ -2,93 +2,116 @@
 
 ## Goal
 
-Explore how citizen-reported city signals in Barcelona relate to recurring
-calendar patterns, weather, place, and city activity. Later phases may use
-regression, anomaly detection, and forecasting where the data supports them.
+Explore how citizen-reported activity in Barcelona relates to calendar,
+weather, place, and city activity. Start with what the actual records support,
+keep reporting behaviour and data selection explicit, and add models only
+when they answer a defined question.
 
 ## Milestone 1 — Discover and understand IRIS
 
-Status: complete
+Status: complete for the preserved 2025 snapshot; live catalog rechecked 2026-09-27.
 
-- [x] Create a reproducible local Python environment.
-- [x] Add commands to list current Open Data BCN IRIS resources.
-- [x] Add a format-agnostic CSV inspection command.
-- [x] Review the catalog output and select the appropriate IRIS resource.
-- [x] Download the source into `data/raw/`.
-- [x] Inspect columns, data types, missingness, duplicate rows, and sample data.
-- [x] Add a focused IRIS profiling command for date coverage, duplicates,
-      geography missingness, and main classification distributions.
-- [x] Identify observed registration and closure date coverage.
-- [x] Record the selected resource ID, download date, and catalog metadata.
-- [x] Inspect duplicate `FITXA_ID` rows and document the initial handling rule.
-- [x] Investigate why some 2025 closure records have older registration dates.
+- [x] Establish a Python 3.11 environment and live catalog discovery command.
+- [x] Select and download the 2025 CSV into `data/raw/` without modifying it.
+- [x] Inspect its 25 observed columns, date coverage, missingness, and categories.
+- [x] Record resource ID `efc9fd4d-a812-427c-846d-a086d22012a4` and provenance.
+- [x] Investigate duplicate `FITXA_ID` values: repeated IDs disappear after exact
+      row deduplication in this snapshot.
+- [x] Identify closure-year selection: all observed closures occur in 2025;
+      some registrations are earlier, and later closures are absent.
+- [x] Revalidate the processed data against preparation of the original raw file.
+- [x] Preserve source fingerprints and distinguish catalog availability from
+      completeness or remote byte-for-byte equivalence.
 
-Initial Milestone 1 conclusions:
-
-- The selected resource is `2025_IRIS_Peticions_Ciutadanes_OpenData.csv`
-  (`efc9fd4d-a812-427c-846d-a086d22012a4`).
-- The 2025 export appears to be closure-year oriented: closure dates are within
-  2025, while 5,284 rows were registered before 2025.
-- Duplicate `FITXA_ID` values currently appear to be exact duplicate rows:
-  after exact de-duplication, no repeated `FITXA_ID` values remain.
-- Geography is not complete enough to treat all requests as place-specific:
-  district is missing for 31.27% of rows and census section for 77.24%.
-
-Exit criterion: we can describe the real schema and limitations of the selected
-IRIS file without relying on guessed field names.
+Evidence: `reports/iris_catalog.md`, `iris_profile.md`, `iris_quality_notes.md`.
+The raw file has 287,304 rows, 3,393 exact duplicates, and 5,284 earlier
+registrations (5,283 after deduplication).
 
 ## Milestone 2 — Prepare an analysis dataset
 
-- [x] Remove exact duplicate rows as a reproducible rule.
-- [x] Keep both registration and closure dates, with explicit naming.
-- [x] Use registration date for reported-demand rhythm unless the analysis question
-  is about resolution timing.
-- [x] Define cleaning rules from the observed schema.
-- [x] Parse and validate relevant dates.
-- [x] Standardise only fields needed for the first analysis.
-- [x] Save reproducible outputs under `data/processed/`.
-- [x] Add basic checks for row counts, nulls, and transformation assumptions.
-- [ ] Decide whether category language variants should be normalised, for
-      example `INCIDENCIA` and `ISSUE`.
-- [x] Create the first exploratory charts from the processed dataset.
+Status: complete for descriptive analysis of the inspected snapshot.
 
-Initial Milestone 2 output:
+- [x] Remove exact duplicate rows only; preserve missing geography and categories.
+- [x] Retain both parsed dates with explicit names and check nonnegative lags.
+- [x] Save prepared data under `data/processed/`, with documented column mapping.
+- [x] Check IDs, date validity, cohort membership, and row reconciliation.
+- [x] Decide category policy: preserve original request-type labels; do not merge
+      apparent translations without a validated crosswalk.
+- [x] Document the observed late-year source-label transition and expose it in a
+      monthly table and plot.
 
-- `data/processed/iris_2025_clean.csv` is generated locally and ignored by Git.
-- `reports/iris_prepare_summary.md` records the preparation checks.
-- `reports/iris_signal_summary.md` records first visible signal readings.
-- `reports/figures/` contains generated charts for daily volume, weekday
-  rhythm, request areas, district/missing-geography distribution, closure lag,
-  daily volume versus lag, month/weekday seasonality, and area-level volume
-  versus lag, district/request-area mix, and reporting-channel mix.
-- `streamlit_app.py` provides the first local interface over the processed
-  dataset.
+Output: 283,911 processed records, including 278,628 registered and closed in
+2025. Preparation notes: `reports/iris_prepare_summary.md`. Analysis decisions:
+`reports/iris_category_decisions.md`.
 
-## Milestone 3 — Explore urban patterns
+## Milestone 3 — Make descriptive patterns visible and explainable
 
-- [x] Establish first request-volume trends and weekday rhythm.
-- [x] Add first request-area comparisons using volume and median closure lag.
-- [x] Compare meaningful geographic groupings supported by records with
-      district information.
-- [x] Examine first civic behaviour signals through reporting-channel mix.
-- [ ] Decide whether reporting-channel mix should become a modelling feature.
-- [x] Produce clear static charts, histograms, scatter plots, and caveats.
-- [x] Add a first local interface for filtering and reading the processed data.
+Status: complete for the current cohort, with coverage limitations explicit.
+
+- [x] Plot daily reporting and weekday averages using full calendar exposure.
+- [x] Show within-year month/weekday patterns without claiming recurring seasonality.
+- [x] Compare observed request areas, recorded closure lags, and reporting channels.
+- [x] Keep missing district visible and show its dependence on area and channel.
+- [x] Retain Other / missing in composition denominators and export underlying counts.
+- [x] Separate 2025 registrations from older registrations when reporting lag tails.
+- [x] Show the closure-year cutoff's implications for late-year volume and lag.
+- [x] Keep channels as descriptive groups; postpone a modelling feature decision
+      until a specific prediction/association question and observation window exist.
+- [x] Produce 13 static plots and 13 downloadable aggregate tables.
+- [x] Generate a reading guide with observations, interpretations, limitations,
+      and a one-minute explanation suitable for presenting the work.
+- [x] Give every plot its own accessible interpretation, connecting the numbers
+      to everyday civic concerns while keeping uncertainty explicit (ethos,
+      logos, and pathos).
+- [x] Show all 13 plots directly in the GitHub README, with individual reading
+      instructions, explanations, and jump links; generate those passages from
+      the same source as the Markdown and HTML reports.
+- [x] Generate a standalone offline HTML report with embedded plots and CSVs.
+- [x] Update the existing local viewer to use the same cohort and calculations,
+      with missing-geography filters, data previews, and safe empty selections.
+- [x] Add regression checks for sparse calendars, denominators, lag tails, input
+      validation, and interface filtering.
+
+Reproduce reports and README: `python -m src.explore_iris_signals --readme-path README.md`.
+Explore: `python -m streamlit run streamlit_app.py`.
+Verify: `python -m unittest discover -s tests -v`.
+
+Reports: `reports/iris_signal_summary.md`, `reports/iris_exploration.html`,
+`reports/iris_analysis_manifest.json`. Aggregate CSVs are generated into
+`data/processed/summaries/`. Raw files remain unchanged.
+
+## Before Milestone 4 — Establish comparable observation windows
+
+Status: next, required before interpreting weather or year-end trends.
+
+- [ ] Inspect adjacent closure-year exports, preserving and profiling each source
+      before combining any records.
+- [ ] Quantify how later closure files change the apparent registration cohort;
+      unresolved requests may remain unobserved even after combining years.
+- [ ] Define comparable follow-up windows for the chosen outcome and explain
+      remaining selection. Do not assume all 2025 registrations are present.
+- [ ] Validate request-type mappings against publisher documentation and inspect
+      stability in area/element/detail fields before using category trends.
+
+Exit criterion: a stated population, date convention, inclusion rule, and
+follow-up window appropriate for a specific comparison.
 
 ## Milestone 4 — Add weather context
 
-- Select a reliable Barcelona weather source and align its time resolution.
-- Test relationships with transparent summaries and regression baselines.
-- Distinguish association from causal claims.
-- After weather and seasonality baselines exist, add dated policy/event context
-  from Barcelona, Catalunya, and Spain as documented external variables.
+Status: not started; the descriptive report makes no weather-effect claims.
+
+- [ ] Define a narrow question, with the request area, time scale, and outcome explicit.
+- [ ] Select and inspect a reliable Barcelona weather source and station coverage.
+- [ ] Align dates, missingness, and spatial/time resolution without imputing IRIS geography.
+- [ ] Compare transparent summaries and calendar-aware regression baselines.
+- [ ] Distinguish association from causation and examine reporting-channel composition.
 
 ## Later, only after the evidence supports it
 
-- anomaly detection;
-- time-aware predictive baselines and model evaluation;
-- city-activity or event data;
-- richer application polish and deployment.
+- documented policy/event context after observation and weather baselines;
+- anomaly detection and time-aware predictive evaluation;
+- additional city-activity data;
+- application polish and deployment.
 
-Advanced modelling is not a prerequisite. Each later addition must answer a
-specific question better than a simpler analysis.
+Advanced models are not a prerequisite. Each addition must answer a specific
+question better than a simpler analysis.
