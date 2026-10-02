@@ -12,12 +12,23 @@ import pandas as pd
 from src.iris_signals import MISSING, registration_cohort, volume_lag_correlation
 
 READING_APPROACH = (
-    "These readings follow three commitments: ethos, earn trust by showing where "
-    "the evidence comes from and where it stops; logos, make the numbers and "
-    "comparisons understandable; pathos, connect them to the shared places and "
-    "public services people care about. Everyday examples explain why a pattern "
-    "could matter; they are not accounts of individual people in the data."
+    "Start with the bold takeaway below each plot. Then read how the chart works, "
+    "what the numbers show, and why it matters. The last paragraph explains what "
+    "we cannot conclude. This keeps evidence, explanation, and everyday human "
+    "context together: ethos, logos, and pathos. Examples describe possible "
+    "situations, not individual people identified in the data."
 )
+
+READING_GLOSSARY = [
+    ("Request / report", "One published IRIS entry. Several entries can concern the same issue."),
+    ("Cohort", "The group we chose to study: here, requests registered and closed in 2025."),
+    ("Registration date", "When a request entered the system; the issue may have started earlier."),
+    ("Recorded closure lag", "Calendar days from registration to administrative closure. Closure does not prove the issue was resolved."),
+    ("Median", "The middle value when values are put in order. At least half are at or below it."),
+    ("95th percentile", "A value that at least 95 out of 100 observed values do not exceed; about 5 out of 100 are higher."),
+    ("Share / percentage", "How many out of every 100 records in the stated group. A larger share need not mean more reports."),
+    ("Correlation", "A score from −1 to +1 for how two quantities move together in a straight-line pattern. Near zero means little such pattern, not proof of no relationship."),
+]
 
 
 def plot_readings(frame: pd.DataFrame, tables: dict[str, pd.DataFrame]) -> list[dict]:
@@ -58,7 +69,7 @@ def plot_readings(frame: pd.DataFrame, tables: dict[str, pd.DataFrame]) -> list[
     corr = volume_lag_correlation(daily)
     corr_text = f"{corr:.2f}" if corr is not None else "not estimable"
 
-    return [
+    stories = [
         {
             "title": "The rhythm of asking the city for help",
             "figures": ["daily"], "table": "daily",
@@ -258,3 +269,22 @@ def plot_readings(frame: pd.DataFrame, tables: dict[str, pd.DataFrame]) -> list[
             "limit": "We preserve both labels and do not merge apparent translations without a documented mapping. They do not identify the language used by citizens. Before using request-type trends to describe changes in city life, we need the publisher's explanation and a check that the categories remained comparable.",
         },
     ]
+
+    takeaways = {
+        "daily": "Report counts change through the year and repeatedly rise and fall within each week.",
+        "weekday": f"An average weekday has about {ratio:.2f} times the reports of an average weekend day." if ratio is not None else "Compare daily averages before comparing weekdays.",
+        "calendar": "Compare similar days: a July Friday and a January Friday have different reporting levels in this file.",
+        "selection": "Late-year requests that closed after 31 December are absent from this file.",
+        "areas": f"Cleaning and public-space maintenance make up about {public_space['share_percent'].sum():.0f} out of every 100 reports studied here.",
+        "districts": f"About {missing_pct:.0f} out of every 100 reports have no district, so a district-only view leaves many reports out.",
+        "missingness": "Removing reports without a district also changes which kinds of concerns we see.",
+        "district_mix": "Districts differ in the mix of reports received; these percentages do not rank districts from best to worst.",
+        "channels": "Street-related reports and administrative questions often reach the council through different channels.",
+        "lag": f"The middle recorded closure time is {lag.median():g} days, but {over_sixty:,} requests took more than 60 days to close.",
+        "area_lag": "A single citywide closure-time figure cannot describe every kind of request fairly.",
+        "scatter": "Knowing how many reports arrived on a day tells us little about their typical recorded closure time in this comparison.",
+        "types": "A change in published labels can look like a change in city problems unless we check the definitions.",
+    }
+    for story in stories:
+        story["takeaway"] = takeaways[story["figures"][0]]
+    return stories

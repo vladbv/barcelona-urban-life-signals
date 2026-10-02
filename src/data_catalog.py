@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import tempfile
 import re
 import sys
 from pathlib import Path
@@ -59,7 +61,7 @@ def safe_filename(resource: dict) -> str:
     return re.sub(r"[^A-Za-z0-9._-]+", "_", candidate)
 
 
-def download_resource(resources: list[dict], resource_id: str) -> Path:
+def download_resource(resources: list[dict], resource_id: str, output_path: Path | None = None) -> Path:
     resource = next((item for item in resources if item.get("id") == resource_id), None)
     if resource is None:
         raise ValueError(f"Resource ID not found in the IRIS catalog: {resource_id}")
@@ -67,16 +69,30 @@ def download_resource(resources: list[dict], resource_id: str) -> Path:
         raise ValueError("The selected resource has no download URL.")
 
     RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
-    destination = RAW_DATA_DIR / safe_filename(resource)
+    destination = output_path if output_path is not None else RAW_DATA_DIR / safe_filename(resource)
+    if not destination.resolve().is_relative_to(RAW_DATA_DIR.resolve()):
+        raise ValueError("Downloads must remain under data/raw/.")
+    destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
         raise FileExistsError(
             f"{destination} already exists; raw downloads are not overwritten."
         )
 
     request = Request(resource["url"], headers={"User-Agent": USER_AGENT})
-    with urlopen(request, timeout=120) as response, destination.open("wb") as output:
-        while chunk := response.read(1024 * 1024):
-            output.write(chunk)
+    # Install only a complete download, without overwriting an existing snapshot.
+    with tempfile.NamedTemporaryFile(dir=destination.parent, suffix=".part", delete=False) as output:
+        temporary = Path(output.name)
+        try:
+            with urlopen(request, timeout=120) as response:
+                while chunk := response.read(1024 * 1024):
+                    output.write(chunk)
+                output.flush()
+                length = response.headers.get("Content-Length")
+                if length and temporary.stat().st_size != int(length):
+                    raise ValueError("Incomplete download; no raw snapshot was installed.")
+            os.link(temporary, destination)
+        finally:
+            temporary.unlink(missing_ok=True)
     return destination
 
 
@@ -89,16 +105,31 @@ def parse_args() -> argparse.Namespace:
         metavar="RESOURCE_ID",
         help="download the resource with this catalog ID",
     )
-    return parser.parse_args()
+    parser.add_argument("--download-path", type=Path, help="new snapshot path under data/raw/; requires --download")
+    parser.add_argument("--catalog-output", type=Path, help="preserve the full catalog JSON in a new file under data/raw/")
+    args = parser.parse_args()
+    if args.download_path and not args.download:
+        parser.error("--download-path requires --download")
+    return args
 
 
 def main() -> int:
     args = parse_args()
     try:
-        resources = get_resources()
+        payload = fetch_json(CATALOG_URL)
+        if not payload.get("success"):
+            raise RuntimeError("Open Data BCN returned an unsuccessful response.")
+        resources = payload["result"].get("resources", [])
+        if args.catalog_output:
+            if not args.catalog_output.resolve().is_relative_to(RAW_DATA_DIR.resolve()):
+                raise ValueError("Catalog snapshots must remain under data/raw/.")
+            args.catalog_output.parent.mkdir(parents=True, exist_ok=True)
+            with args.catalog_output.open("x", encoding="utf-8") as stream:
+                json.dump(payload, stream, ensure_ascii=False, indent=2)
+            print(f"Preserved catalog: {args.catalog_output}")
         print_resources(resources)
         if args.download:
-            destination = download_resource(resources, args.download)
+            destination = download_resource(resources, args.download, args.download_path)
             print(f"\nDownloaded without modification to: {destination}")
     except (HTTPError, URLError, TimeoutError, OSError, RuntimeError, ValueError) as error:
         print(f"Error: {error}", file=sys.stderr)

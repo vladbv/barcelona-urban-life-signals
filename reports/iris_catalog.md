@@ -48,3 +48,18 @@ The processed dataset was reproduced in memory from this raw snapshot and
 matched the existing CSV, allowing for CSV numeric dtype round-tripping.
 Regenerated analysis rules and fingerprints are recorded in
 `iris_analysis_manifest.json`.
+
+
+## Adjacent snapshot (2026-10-02)
+
+The full catalog response is preserved locally as
+`data/raw/iris_catalog_2026-10-02.json`. The selected later CSV resource is
+`eae9a19a-4543-45db-bc13-3e3073b58324`, downloaded to
+`data/raw/2026_IRIS_Peticions_Ciutadanes_OpenData_2026-10-02.csv` (15,406,383 bytes).
+Its observed closures span 2026-01-01 to 2026-03-31. Download date and observed
+data coverage are distinct; catalog metadata supplies no completeness guarantee.
+
+SHA-256: `e5ae6711791186136998bb19198ce6cae4fd53da18d9a2146a43e10630e5a388`.
+Source inspection and the comparison are documented in
+[iris_2026_profile.md](iris_2026_profile.md) and
+[iris_observation_windows.md](iris_observation_windows.md).

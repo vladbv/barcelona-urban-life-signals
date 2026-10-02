@@ -24,3 +24,4 @@ reports/figures/*
 !reports/figures/iris_geography_coverage.png
 !reports/figures/iris_cohort_selection.png
 !reports/figures/iris_request_type_labels.png
+!reports/figures/iris_later_closures.png

@@ -80,3 +80,18 @@ registration coverage. Establish common follow-up windows and label stability
 before joining weather. Additional years alone do not prove completeness:
 unresolved requests may still be absent. A single closure-selected year cannot
 establish recurring seasonality or a weather effect.
+
+
+## Follow-up evidence (2026-10-02)
+
+The adjacent export has now been inspected. It adds 6,419 registrations from
+2025, including 5,331 in December, and contains closures through 2026-03-31.
+See [the observation-window audit](iris_observation_windows.md) for the
+30-day and 90-day definitions and their limits.
+
+The publisher catalog defines TIPUS as a type of entry without listing a value
+crosswalk. The 2026 source introduces `INCIDÈNCIA` alongside a broader return
+to Catalan labels. Exact comparisons also find two area labels, 28 element
+labels, and 135 detail labels not present in the preserved 2025 export.
+No automatic merging is justified. Shared area names allow a narrowly stated
+comparison but do not establish unchanged classification practice.

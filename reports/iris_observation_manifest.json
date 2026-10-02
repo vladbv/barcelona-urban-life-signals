@@ -1,0 +1,62 @@
+{
+  "sources": [
+    {
+      "path": "data/raw/2025_IRIS_Peticions_Ciutadanes_OpenData.csv",
+      "sha256": "55e017aae02eec8a0864b6189fe6dcf24664dd2bbb200aea1078594e25380332"
+    },
+    {
+      "path": "data/processed/iris_2025_clean.csv",
+      "sha256": "c8330100f876342f10ec36f83c2e4b1e12e26df27dd4ef2b4643a44956d784fa"
+    },
+    {
+      "path": "data/raw/2026_IRIS_Peticions_Ciutadanes_OpenData_2026-10-02.csv",
+      "sha256": "e5ae6711791186136998bb19198ce6cae4fd53da18d9a2146a43e10630e5a388"
+    },
+    {
+      "path": "data/raw/iris_catalog_2026-10-02.json",
+      "sha256": "77d531781505153393d48cf6aa7738b258e8a4b615c07e6c6c7e8e1478954f04"
+    }
+  ],
+  "later_resource_id": "eae9a19a-4543-45db-bc13-3e3073b58324",
+  "source_url": "https://opendata-ajuntament.barcelona.cat/data/en/dataset/iris",
+  "observed_last_closure": "2026-03-31",
+  "later_raw_rows": 72326,
+  "later_exact_duplicates_removed": 1452,
+  "later_columns": [
+    "FITXA_ID",
+    "TIPUS",
+    "AREA",
+    "ELEMENT",
+    "DETALL",
+    "DIA_DATA_ALTA",
+    "MES_DATA_ALTA",
+    "ANY_DATA_ALTA",
+    "DIA_DATA_TANCAMENT",
+    "MES_DATA_TANCAMENT",
+    "ANY_DATA_TANCAMENT",
+    "CODI_DISTRICTE",
+    "DISTRICTE",
+    "CODI_BARRI",
+    "BARRI",
+    "SECCIO_CENSAL",
+    "TIPUS_VIA",
+    "CARRER",
+    "NUMERO",
+    "COORDENADA_X",
+    "COORDENADA_Y",
+    "LONGITUD",
+    "LATITUD",
+    "SUPORT",
+    "CANALS_RESPOSTA"
+  ],
+  "cross_export_id_overlap": 0,
+  "added_2025_registrations": 6419,
+  "combined_observed_2025_registrations": 285047,
+  "followup_days": [
+    30,
+    90
+  ],
+  "followup_endpoint": "registration_date + horizon <= observed_last_closure; inclusive lag <= horizon",
+  "coverage_warning": "Observed date maxima do not certify publisher completeness. Still-open and unpublished records are unknown.",
+  "category_policy": "No label merging; publisher field definition does not provide a value crosswalk."
+}

@@ -15,7 +15,7 @@ import matplotlib
 import pandas as pd
 
 from src.iris_signals import COHORT_NOTE, registration_cohort
-from src.iris_interpretations import READING_APPROACH, plot_readings
+from src.iris_interpretations import READING_APPROACH, READING_GLOSSARY, plot_readings
 from src.profile_iris import markdown_table
 
 SOURCE_URL = "https://opendata-ajuntament.barcelona.cat/data/en/dataset/iris"
@@ -30,7 +30,8 @@ def plot_markdown(section: dict, number: int, figures: dict, parent: Path, headi
         relative = os.path.relpath(figures[name], parent)
         paragraphs.append(f"![{section['alt']}]({relative})")
     paragraphs.extend([
-        f"*{section['how_to_read']}*", section["finding"],
+        f"**Takeaway: {section['takeaway']}**",
+        f"*How to read it: {section['how_to_read']}*", section["finding"],
         section["meaning"], section["limit"],
     ])
     return "\n\n".join(paragraphs)
@@ -51,6 +52,8 @@ def update_readme(path: Path, sections: list[dict], figures: dict) -> None:
         navigation.append(f"[{i}. {section['title']}](#{i}-{slug})")
     body = "\n\n".join([
         "## A walk through the plots", READING_APPROACH,
+        "#### A few words, explained simply",
+        markdown_table(pd.DataFrame(READING_GLOSSARY, columns=["Word", "Plain meaning"])),
         "All thirteen plots are shown below. Follow the story in order, or jump to a reading:",
         "\n".join(f"- {link}" for link in navigation),
         *(plot_markdown(section, i, figures, path.parent, "###") for i, section in enumerate(sections, 1)),
@@ -116,6 +119,7 @@ def write_reports(frame: pd.DataFrame, tables: dict, figures: dict, args) -> Non
         f"Processed input: `{args.input_path}` ({len(frame):,} records).",
         "## A one-minute explanation", talk,
         "## How to read the plots", READING_APPROACH,
+        markdown_table(pd.DataFrame(READING_GLOSSARY, columns=["Word", "Plain meaning"])),
     ]
     for i, section in enumerate(sections, 1):
         markdown.append(plot_markdown(section, i, figures, args.report_path.parent, "##"))
@@ -143,7 +147,7 @@ def write_reports(frame: pd.DataFrame, tables: dict, figures: dict, args) -> Non
         table = tables[section["table"]]
         preview = table.head(12).round(2).to_html(index=False, border=0, na_rep="—")
         contents.append(f'<section id="reading-{i}"><p class="eyebrow">Reading {i:02}</p><h2>{e(section["title"])}</h2>'
-                        f'{"".join(pictures)}'
+                        f'{"".join(pictures)}<p><strong>Takeaway: {e(section["takeaway"])}</strong></p>'
                         f'<p class="finding">{e(section["finding"])}</p><p>{e(section["meaning"])}</p>'
                         f'<p class="boundary">{e(section["limit"])}</p>'
                         f'<details><summary>Inspect supporting data · {len(table)} rows (first 12 shown)</summary><div class="table-wrap">{preview}</div></details></section>')
@@ -171,6 +175,7 @@ figcaption{{color:var(--muted);font-size:.92rem;padding:12px 0}}.boundary{{borde
 <main><aside><strong>Start with the cohort.</strong> {e(COHORT_NOTE)}</aside><nav aria-label="Report contents">{navigation}</nav>
 <section><p class="eyebrow">For a conversation or presentation</p><h2>The one-minute explanation</h2><blockquote>{e(talk)}</blockquote></section>
 <p class="muted">{e(READING_APPROACH)}</p>
+<details><summary>A few words, explained simply</summary><dl>{"".join(f"<dt><strong>{e(term)}</strong></dt><dd>{e(meaning)}</dd>" for term, meaning in READING_GLOSSARY)}</dl></details>
 {"".join(contents)}
 <section><p class="eyebrow">Evidence you can inspect</p><h2>Aggregate data, ready to use</h2><p>Download the complete tables behind these readings. All charts and CSVs are embedded in this file; it works offline and can be shared on its own.</p><div class="downloads">{"".join(downloads)}</div></section>
 <section><h2>How this report was made</h2><ul>{''.join(f'<li>{e(method)}</li>' for method in methods)}</ul>

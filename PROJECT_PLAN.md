@@ -82,25 +82,38 @@ Reports: `reports/iris_signal_summary.md`, `reports/iris_exploration.html`,
 
 ## Before Milestone 4 — Establish comparable observation windows
 
-Status: next, required before interpreting weather or year-end trends.
+Status: observation-window audit complete for the preserved 2025 export and
+2026 snapshot downloaded on 2026-10-02. Type-label mapping remains unverified.
 
-- [ ] Inspect adjacent closure-year exports, preserving and profiling each source
-      before combining any records.
-- [ ] Quantify how later closure files change the apparent registration cohort;
-      unresolved requests may remain unobserved even after combining years.
-- [ ] Define comparable follow-up windows for the chosen outcome and explain
-      remaining selection. Do not assume all 2025 registrations are present.
-- [ ] Validate request-type mappings against publisher documentation and inspect
-      stability in area/element/detail fields before using category trends.
+- [x] Preserve and inspect the adjacent 2026 closure export: 72,326 rows, 25
+      matching columns, 1,452 exact duplicates, 70,874 unique records.
+- [x] Check cross-export identities, dates, and closure lags before combining.
+- [x] Quantify the 6,419 additional 2025 registrations, including 5,331 in December.
+- [x] Establish 30-day and 90-day inclusive follow-up definitions; mask dates
+      without enough observed follow-up rather than treating them as zero.
+- [x] Inspect publisher field definitions and exact category labels. The catalog
+      does not supply a value crosswalk; retain original request-type labels.
+- [ ] Obtain a publisher-validated mapping before using translated request-type
+      trends. This remains outside the narrower category-based weather question.
 
-Exit criterion: a stated population, date convention, inclusion rule, and
-follow-up window appropriate for a specific comparison.
+The later snapshot ends on 2026-03-31, despite its October download date.
+All 365 dates in 2025 satisfy both follow-up date rules, but source completeness
+and still-open requests remain unknown. The defined outcome is a count of
+observed requests closed within a fixed period, not complete demand or a
+closure success rate. Shared category names do not certify unchanged meaning.
+
+Evidence: `reports/iris_observation_windows.md`, `iris_2026_profile.md`, and
+`iris_observation_manifest.json`. Reproduce with `python -m src.audit_iris_observation`.
+The original 2025 explorer and 13-plot tour remain a separate comparison.
 
 ## Milestone 4 — Add weather context
 
-Status: not started; the descriptive report makes no weather-effect claims.
+Status: narrow question defined; source discovery and modelling not started.
 
-- [ ] Define a narrow question, with the request area, time scale, and outcome explicit.
+- [x] Define the first question: daily weather and observed cleaning/collection
+      requests registered in 2025 and closed within 30 days, with 90-day sensitivity.
+      Exclude unverified request-type mappings and distinguish this selected count
+      from complete demand.
 - [ ] Select and inspect a reliable Barcelona weather source and station coverage.
 - [ ] Align dates, missingness, and spatial/time resolution without imputing IRIS geography.
 - [ ] Compare transparent summaries and calendar-aware regression baselines.
