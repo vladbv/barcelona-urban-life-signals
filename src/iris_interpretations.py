@@ -195,7 +195,7 @@ def plot_readings(frame: pd.DataFrame, tables: dict[str, pd.DataFrame]) -> list[
             "title": "The route into the system shapes what becomes visible",
             "figures": ["channels"], "table": "area_channel_shares",
             "alt": "Reporting-channel shares within request areas, with mobile prominent for cleaning and web for the administrative portal.",
-            "how_to_read": "Each horizontal bar represents all reports in one request area. Its coloured segments show reporting-channel shares; Other / missing preserves the channels outside the five displayed leaders.",
+            "how_to_read": "Each horizontal bar represents all reports in one request area. Read the English labels first; the original published labels appear underneath in parentheses. Its coloured segments show reporting-channel shares; Other / missing preserves the channels outside the five displayed leaders. These are display translations, not merged categories.",
             "finding": (
                 f"Mobile (MÒBIL) accounts for {channel_mix.loc[cleaning, mobile]:.1f}% of "
                 f"cleaning reports and {channel_mix.loc[maintenance, mobile]:.1f}% of "

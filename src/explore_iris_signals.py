@@ -26,6 +26,29 @@ BARCELONA = {
     "ink": "#2F241D", "grid": "#D8BFA6",
 }
 
+# Display translations only: keep the published categories and all counts intact.
+CHANNEL_PLOT_LABELS = {
+    "Recollida i neteja de l'espai urbà": "Waste collection and street cleaning",
+    "Manteniment de l'espai urbà": "Public-space maintenance",
+    "Portal de tràmits": "Online services portal",
+    "Informació  tràmits i atenció ciutadana": "Information and citizen services",
+    "Mobilitat": "Mobility and transport",
+    "Prevenció i seguretat": "Prevention and safety",
+    "Gestions municipals": "Municipal administration",
+    "Urbanisme": "Urban planning",
+    "MÒBIL": "Mobile",
+    "WEB": "Web",
+    "TELÈFON": "Telephone",
+    "RECLAMACIÓ INTERNA": "Internal complaint",
+    "INSTÀNCIA TELEMÀTICA": "Formal online submission",
+}
+
+
+def channel_plot_label(value: str) -> str:
+    original = str(value).strip()
+    english = CHANNEL_PLOT_LABELS.get(original)
+    return f"{english}\n({original})" if english else original
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -156,16 +179,18 @@ def create_figures(tables: dict[str, pd.DataFrame], directory: Path) -> dict[str
     figures["district_mix"] = heatmap(tables["district_area_shares"].set_index("district"), "Request-area composition among records with a district", "Share of all records in district (%)", directory, "district_area_mix_heatmap", "Other / missing retains every remaining request area. No population or reporting-rate adjustment.", percent=True)
 
     mix = tables["area_channel_shares"].set_index("area").iloc[::-1]
-    fig, ax = plt.subplots(figsize=(12, 7.5))
+    fig, ax = plt.subplots(figsize=(14, 9))
     left = np.zeros(len(mix))
     colors = [BARCELONA[k] for k in ["sea", "terracotta", "tile", "green", "vermell"]] + ["#B8B0A5"]
     for column, color in zip(mix, colors):
-        ax.barh(wrapped(mix.index), mix[column], left=left, label=column, color=color)
+        ax.barh(range(len(mix)), mix[column], left=left,
+                label=channel_plot_label(column), color=color)
         left += mix[column].to_numpy()
+    ax.set_yticks(range(len(mix)), [channel_plot_label(value) for value in mix.index], fontsize=9)
     style_axis(ax, "Reporting channels vary by request area", "Share of all records in request area (%)")
     ax.set_xlim(0, 100)
-    ax.legend(loc="upper center", bbox_to_anchor=(.5, -.12), ncol=2, frameon=False, fontsize=8)
-    figures["channels"] = save(fig, directory, "support_mix_by_area", "Other / missing retains all channels outside the five most frequent; each row totals 100%.")
+    ax.legend(loc="upper center", bbox_to_anchor=(.5, -.12), ncol=3, frameon=False, fontsize=9)
+    figures["channels"] = save(fig, directory, "support_mix_by_area", "English reading labels; published labels in parentheses. Other / missing retains remaining channels; each row totals 100%.")
 
     geo = tables["areas"].head(10).iloc[::-1]
     fig, ax = plt.subplots(figsize=(12, 7))

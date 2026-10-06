@@ -233,7 +233,7 @@ A larger share of cleaning reports does not establish dirtier streets. A share c
 
 **Takeaway: Street-related reports and administrative questions often reach the council through different channels.**
 
-*How to read it: Each horizontal bar represents all reports in one request area. Its coloured segments show reporting-channel shares; Other / missing preserves the channels outside the five displayed leaders.*
+*How to read it: Each horizontal bar represents all reports in one request area. Read the English labels first; the original published labels appear underneath in parentheses. Its coloured segments show reporting-channel shares; Other / missing preserves the channels outside the five displayed leaders. These are display translations, not merged categories.*
 
 Mobile (MÒBIL) accounts for 60.7% of cleaning reports and 54.3% of maintenance reports. Web accounts for 96.9% of administrative portal requests. Different categories reach IRIS through markedly different routes.
 
@@ -298,6 +298,50 @@ Without checking the labels, we could tell a dramatic story about one type of pr
 We preserve both labels and do not merge apparent translations without a documented mapping. They do not identify the language used by citizens. Before using request-type trends to describe changes in city life, we need the publisher's explanation and a check that the categories remained comparable.
 
 <!-- END IRIS PLOT READINGS -->
+
+## Cost of living vs. quality of life: a neighbourhood view
+
+**Higher rent does not always come with higher resident satisfaction.** This
+comparison places all **73 neighbourhoods** using two official 2025 sources:
+monthly contractual rent and residents’ satisfaction with living in their
+neighbourhood. These are useful proxies, not complete measures of living costs
+or quality of life.
+
+![All 73 Barcelona neighbourhoods by monthly rent and resident satisfaction, divided into four relative quadrants](reports/figures/neighbourhood_living_quadrants.png)
+
+**How to read it:** right means higher rent; up means higher satisfaction.
+The dashed lines mark the middle neighbourhood on each measure:
+**€979.20/month** and **7.93 out of 10**. Numbers identify neighbourhoods in the
+[complete lookup table](reports/neighbourhood_living.md#every-neighbourhood-and-its-evidence).
+
+| Quadrant | What it means relative to those dividing lines | Neighbourhoods |
+| --- | --- | ---: |
+| Premium Living | Higher rent, higher satisfaction | 23 |
+| Best Value | Lower rent, higher satisfaction | 14 |
+| Less for your money | Higher rent, lower satisfaction | 14 |
+| Budget Living | Lower rent, lower satisfaction | 22 |
+
+For example, **Sant Andreu (60)** combines about **€880/month** with a
+satisfaction score of **8.31/10**, placing it in Best Value. **Pedralbes (21)**
+has about **€1,948/month** and **8.42/10**, placing it in Premium Living.
+The comparison invites a practical question: what does a higher housing budget
+buy, and which qualities of a place matter to you?
+
+**Read the boundaries with care.** Nine hollow points flag small survey samples;
+some neighbourhood estimates use only five valid answers. Nearby points and
+points near the dividing lines should not be treated as clearly different.
+“Budget Living” means lower rent in this comparison, not affordable for every
+household. Rent excludes other living costs and depends on the homes rented;
+satisfaction captures one subjective aspect of life. These are exploratory
+estimates from official survey responses, not official neighbourhood rankings
+or housing recommendations. No IRIS complaint counts enter either axis.
+
+The [reading guide, all 73 names, sample sizes and methods](reports/neighbourhood_living.md)
+links the original sources and explains the weighting. Reproduce this separate
+plot with `python -m src.neighbourhood_quadrants --download`; the option downloads
+missing source files only (the historical survey CSV is approximately 570 MB).
+Existing raw files are preserved. The chart also has a
+[source manifest](reports/neighbourhood_living_manifest.json).
 
 ## Reproduce the analysis
 

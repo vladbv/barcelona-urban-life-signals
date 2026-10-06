@@ -128,3 +128,19 @@ Status: narrow question defined; source discovery and modelling not started.
 
 Advanced models are not a prerequisite. Each addition must answer a specific
 question better than a simpler analysis.
+
+## Requested addition — neighbourhood housing cost and satisfaction
+
+Status: exploratory 2025 comparison complete (2026-10-06).
+
+- [x] Make plot 9 bilingual with English reading labels and original categories.
+- [x] Inspect official annual rent workbook and survey fields/codebooks before joining.
+- [x] Match all 73 neighbourhoods; use survey weights and exclude nonresponses.
+- [x] Publish the four requested quadrants with median boundaries, a full name table,
+      source fingerprints and explicit small-sample flags.
+- [x] Explain that housing rent and neighbourhood satisfaction are limited proxies;
+      these estimates are not official neighbourhood rankings or IRIS-derived measures.
+
+Reproduce with `python -m src.neighbourhood_quadrants --download` (downloads only
+missing originals), or omit `--download` for an offline rebuild. No dependencies
+added. The existing weather milestone remains separate.

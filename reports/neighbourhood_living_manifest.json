@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "path": "data/raw/2025_r25041_Serveis_Municipals_Evolucio2025_BD_CSVtext_v1_0.csv",
+      "url": "https://opendata-ajuntament.barcelona.cat/data/dataset/b1cc0c98-9912-4fed-9d75-f577b50a2e9e/resource/df3c3bd9-174c-48fd-831f-874309453039/download",
+      "sha256": "b191ae573df6cb29d594831e52e1cf7f73346f8ec73c198260bbaa460255dbbb"
+    },
+    {
+      "path": "data/raw/anual_bcn_lloguer_2026-10-06.xlsx",
+      "url": "https://habitatge.gencat.cat/web/.content/home/dades/estadistiques/01_Estadistiques_de_construccio_i_mercat_immobiliari/03_Mercat_de_lloguer/03_Lloguers_Barcelona_per_districtes_i_barris/anual_bcn_lloguer.xlsx",
+      "sha256": "90d7d307cce4aa5d7378b28a5a2412e3de96b7796959db1224a867e38b31fe57"
+    }
+  ],
+  "year": 2025,
+  "rent_median": 979.1962573099408,
+  "satisfaction_median": 7.9281079917811645,
+  "neighbourhoods": 73,
+  "plotted": 73,
+  "small_samples": 9,
+  "valid_responses": 5996,
+  "nonresponses": 4,
+  "quadrants": {
+    "Premium Living": 23,
+    "Budget Living": 22,
+    "Less for your money": 14,
+    "Best Value": 14
+  },
+  "methodology": "Both axes use 2025 data. Rent is the annual mean monthly contractual rent from deposited INCASÒL rental bonds; the workbook publishes geolocated contracts and suppresses areas with fewer than six contracts. It does not measure groceries, utilities, household income or the rents of every existing tenant. Dwelling sizes and rental mix differ. Satisfaction is our PES-weighted mean of SATISF_RES_BARRI_0A10 in the official Municipal Services Survey. The endpoint text responses are decoded as 0 and 10; “NO HO SAP”, “NO CONTESTA” and missing responses are excluded. The unweighted valid response count and Kish effective sample size, (sum of weights)² / sum of squared weights, are shown. Hollow points flag either count below 30: this is a project caution rule, not an official reliability threshold. The survey supports grouped-neighbourhood reporting; these individual-neighbourhood estimates are exploratory, not official neighbourhood rankings, and we have not estimated design-based confidence intervals. The two AEI extensions in rent names (Poble Sec / Parc Montjuïc and Marina del Prat Vermell / Zona Franca) are explicitly matched to their residential neighbourhood names; published rent names are retained. Other names are matched after case, whitespace, apostrophe and hyphen-spacing normalization; all joins must be one-to-one. Cutoffs are unweighted medians across neighbourhoods with both measures, not citywide household averages. Ties go to the higher side; missing measures are never assigned a quadrant. Category names are relative labels, not judgments about residents, a causal claim or a recommendation to rent there."
+}
