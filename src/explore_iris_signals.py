@@ -27,7 +27,7 @@ BARCELONA = {
 }
 
 # Display translations only: keep the published categories and all counts intact.
-CHANNEL_PLOT_LABELS = {
+ENGLISH_READING_LABELS = {
     "Recollida i neteja de l'espai urbà": "Waste collection and street cleaning",
     "Manteniment de l'espai urbà": "Public-space maintenance",
     "Portal de tràmits": "Online services portal",
@@ -36,6 +36,18 @@ CHANNEL_PLOT_LABELS = {
     "Prevenció i seguretat": "Prevention and safety",
     "Gestions municipals": "Municipal administration",
     "Urbanisme": "Urban planning",
+    "Sanitat i salut pública": "Health and public health",
+    "Serveis socials": "Social services",
+    "Cultura": "Culture",
+    "Hisenda": "Municipal finance and taxes",
+    "Medi ambient": "Environment",
+    "Transports públics": "Public transport",
+    "AGRAIMENT": "Thanks",
+    "CONSULTA": "Inquiry",
+    "INCIDENCIA": "Incident",
+    "PETICIO DE SERVEI": "Service request",
+    "QUEIXA": "Complaint",
+    "SUGGERIMENT": "Suggestion",
     "MÒBIL": "Mobile",
     "WEB": "Web",
     "TELÈFON": "Telephone",
@@ -44,9 +56,9 @@ CHANNEL_PLOT_LABELS = {
 }
 
 
-def channel_plot_label(value: str) -> str:
+def bilingual_label(value: str) -> str:
     original = str(value).strip()
-    english = CHANNEL_PLOT_LABELS.get(original)
+    english = ENGLISH_READING_LABELS.get(original)
     return f"{english}\n({original})" if english else original
 
 
@@ -89,13 +101,15 @@ def save(fig: plt.Figure, directory: Path, name: str, note: str = "") -> Path:
 
 
 def wrapped(values, width: int = 32) -> list[str]:
-    return [textwrap.fill(str(value), width) for value in values]
+    return ["\n".join(textwrap.fill(line, width) for line in str(value).splitlines()) for value in values]
 
 
 def horizontal_bars(table: pd.DataFrame, category: str, title: str, directory: Path, name: str) -> Path:
     table = table.head(12).iloc[::-1]
-    fig, ax = plt.subplots(figsize=(11.5, 7))
-    ax.barh(wrapped(table[category]), table["requests"], color=BARCELONA["green"])
+    fig, ax = plt.subplots(figsize=(14, 10) if category == "area" else (11.5, 7))
+    labels = [bilingual_label(value) for value in table[category]] if category == "area" else table[category]
+    ax.barh(wrapped(labels, 42), table["requests"], color=BARCELONA["green"])
+    ax.tick_params(axis="y", labelsize=9)
     for i, (_, row) in enumerate(table.iterrows()):
         ax.text(row["requests"], i, f"  {row['requests']:,} ({row['share_percent']:.1f}%)", va="center", fontsize=8)
     style_axis(ax, title, "Observed requests")
@@ -105,11 +119,13 @@ def horizontal_bars(table: pd.DataFrame, category: str, title: str, directory: P
 
 
 def heatmap(table: pd.DataFrame, title: str, label: str, directory: Path, name: str, note: str, percent: bool = False) -> Path:
-    fig, ax = plt.subplots(figsize=(13, 7.5))
+    fig, ax = plt.subplots(figsize=(16, 10) if name == "district_area_mix_heatmap" else (13, 7.5))
     image = ax.imshow(table.values, cmap="YlGnBu", aspect="auto", vmin=0)
     ax.set_title(title, loc="left", pad=18, fontweight="bold", color=BARCELONA["ink"])
-    ax.set_xticks(range(len(table.columns)), wrapped(table.columns, 17), fontsize=8)
-    ax.set_yticks(range(len(table)), table.index, fontsize=9)
+    xlabels = [bilingual_label(value) for value in table.columns] if name == "district_area_mix_heatmap" else table.columns
+    ax.set_xticks(range(len(table.columns)), wrapped(xlabels, 19), fontsize=8)
+    ylabels = [bilingual_label(value) for value in table.index] if name == "request_type_labels" else table.index
+    ax.set_yticks(range(len(table)), ylabels, fontsize=9)
     maximum = np.nanmax(table.values)
     for y in range(len(table)):
         for x in range(len(table.columns)):
@@ -127,8 +143,8 @@ def create_figures(tables: dict[str, pd.DataFrame], directory: Path) -> dict[str
     daily = tables["daily"]
     fig, ax = plt.subplots(figsize=(12, 5.5))
     ax.plot(daily["registration_date"], daily["requests"], color=BARCELONA["tile"], alpha=.5, lw=1, label="Daily records")
-    ax.plot(daily["registration_date"], daily["rolling_7_day"], color=BARCELONA["sea"], lw=2.5, label="Trailing 7 calendar days")
-    style_axis(ax, "A weekly reporting rhythm within the observed cohort", "Registration date", "Observed requests")
+    ax.plot(daily["registration_date"], daily["rolling_7_day"], color=BARCELONA["sea"], lw=2.5, label="Average over the latest 7 days")
+    style_axis(ax, "When residents submit requests to the council", "Registration date", "Observed requests")
     ax.set_ylim(bottom=0)
     ax.legend(frameon=False)
     figures["daily"] = save(fig, directory, "daily_registration_volume", "Late-year records must close by 31 December to appear here; the year-end decline is not a demand estimate.")
@@ -141,42 +157,42 @@ def create_figures(tables: dict[str, pd.DataFrame], directory: Path) -> dict[str
     ax.set_ylim(0, weekday["mean_daily_requests"].max() * 1.15)
     figures["weekday"] = save(fig, directory, "weekday_pattern", "Each total is divided by the number of that weekday in 2025 (52 or 53 days).")
 
-    figures["areas"] = horizontal_bars(tables["areas"], "area", "Which request areas appear most often?", directory, "top_request_areas")
-    figures["districts"] = horizontal_bars(tables["districts"], "district", "Missing district is part of the distribution", directory, "district_distribution")
+    figures["areas"] = horizontal_bars(tables["areas"], "area", "Cleaning and street maintenance account for most requests", directory, "top_request_areas")
+    figures["districts"] = horizontal_bars(tables["districts"], "district", "How many requests have a recorded district?", directory, "district_distribution")
 
     fig, ax = plt.subplots(figsize=(10, 5.5))
     lag = tables["closure_lag"]
-    bars = ax.bar(lag["lag_days"].astype(str), lag["requests"], color=BARCELONA["vermell"])
+    bars = ax.bar(lag["lag_days"].astype(str).replace({">60": "More than 60"}), lag["requests"], color=BARCELONA["vermell"])
     ax.bar_label(bars, fmt="{:,.0f}", padding=4, fontsize=8)
-    style_axis(ax, "Recorded closure lags have a long tail", "Calendar days from registration to recorded closure (unequal-width groups)", "Observed requests")
+    style_axis(ax, "How many days pass before a request is marked closed?", "Calendar days from registration to being marked closed (ranges differ in width)", "Observed requests")
     ax.set_ylim(0, lag["requests"].max() * 1.15)
-    figures["lag"] = save(fig, directory, "closure_lag_histogram", "The >60 bucket contains every longer lag. Recorded closure does not establish that an issue was resolved.")
+    figures["lag"] = save(fig, directory, "closure_lag_histogram", "More than 60 includes all longer intervals. Marked closed does not necessarily mean the issue was fixed.")
 
     fig, ax = plt.subplots(figsize=(10, 6))
     observed = daily.dropna(subset=["median_closure_lag_days"])
     dots = ax.scatter(observed["requests"], observed["median_closure_lag_days"], c=observed["missing_district_percent"], cmap="YlGnBu", s=30, alpha=.8)
     corr = volume_lag_correlation(daily)
     ax.text(.02, .97, f"Pearson r = {corr:.2f}\nn = {len(observed)} observed days" if corr is not None else "Correlation not estimable", transform=ax.transAxes, va="top")
-    style_axis(ax, "Daily volume and recorded closure lag", "Observed requests registered that day", "Median recorded closure lag (days)")
+    style_axis(ax, "Daily request counts and time until marked closed", "Observed requests registered that day", "Days until marked closed: middle request (median)")
     fig.colorbar(dots, ax=ax, label="Missing district (%)")
     figures["scatter"] = save(fig, directory, "daily_volume_vs_closure_lag", "All days with observed requests; no volume threshold. Descriptive association, with no causal interpretation.")
 
     calendar = daily.pivot_table(index="weekday", columns="month", values="requests", aggfunc="mean").reindex(WEEKDAYS)
     calendar.columns = [pd.Timestamp(month).strftime("%b") for month in calendar.columns]
-    figures["calendar"] = heatmap(calendar, "Calendar pattern within one observed year", "Mean observed requests / calendar day", directory, "month_weekday_heatmap", "Zero-record days are included. A single closure-selected year cannot establish recurring seasonality.")
+    figures["calendar"] = heatmap(calendar, "How request counts vary by month and weekday", "Mean observed requests / calendar day", directory, "month_weekday_heatmap", "Zero-record days are included. A single closure-selected year cannot establish recurring seasonality.")
 
     areas = tables["areas"].head(12).sort_values("median_closure_lag_days")
-    fig, ax = plt.subplots(figsize=(12, 7.5))
+    fig, ax = plt.subplots(figsize=(14, 10))
     ax.hlines(range(len(areas)), 0, areas["median_closure_lag_days"], color=BARCELONA["grid"])
     ax.scatter(areas["median_closure_lag_days"], range(len(areas)), s=areas["requests"] / areas["requests"].max() * 700 + 50, color=BARCELONA["sea"])
-    ax.set_yticks(range(len(areas)), wrapped(areas["area"]))
+    ax.set_yticks(range(len(areas)), wrapped([bilingual_label(value) for value in areas["area"]], 42), fontsize=9)
     for y, (_, row) in enumerate(areas.iterrows()):
         ax.annotate(f"{row['requests']:,}", (row["median_closure_lag_days"], y), xytext=(18, 0), textcoords="offset points", va="center", fontsize=8)
-    style_axis(ax, "Closure lags differ across request areas", "Median recorded closure lag (days)")
+    style_axis(ax, "Time until marked closed varies by request category", "Days until marked closed: middle request (median)")
     ax.set_xlim(0, areas["median_closure_lag_days"].max() * 1.35)
     figures["area_lag"] = save(fig, directory, "area_volume_vs_lag", "Dot size and labels show record counts. Different request areas represent different administrative processes.")
 
-    figures["district_mix"] = heatmap(tables["district_area_shares"].set_index("district"), "Request-area composition among records with a district", "Share of all records in district (%)", directory, "district_area_mix_heatmap", "Other / missing retains every remaining request area. No population or reporting-rate adjustment.", percent=True)
+    figures["district_mix"] = heatmap(tables["district_area_shares"].set_index("district"), "What types of requests are recorded in each district?", "Share of all records in district (%)", directory, "district_area_mix_heatmap", "Darker = a larger share of requests, not worse conditions. This is not a district quality ranking. Each row totals 100% before rounding.", percent=True)
 
     mix = tables["area_channel_shares"].set_index("area").iloc[::-1]
     fig, ax = plt.subplots(figsize=(14, 9))
@@ -184,19 +200,20 @@ def create_figures(tables: dict[str, pd.DataFrame], directory: Path) -> dict[str
     colors = [BARCELONA[k] for k in ["sea", "terracotta", "tile", "green", "vermell"]] + ["#B8B0A5"]
     for column, color in zip(mix, colors):
         ax.barh(range(len(mix)), mix[column], left=left,
-                label=channel_plot_label(column), color=color)
+                label=bilingual_label(column), color=color)
         left += mix[column].to_numpy()
-    ax.set_yticks(range(len(mix)), [channel_plot_label(value) for value in mix.index], fontsize=9)
-    style_axis(ax, "Reporting channels vary by request area", "Share of all records in request area (%)")
+    ax.set_yticks(range(len(mix)), [bilingual_label(value) for value in mix.index], fontsize=9)
+    style_axis(ax, "How requests reach the council: mobile, web and telephone", "Share of all records in request area (%)")
     ax.set_xlim(0, 100)
     ax.legend(loc="upper center", bbox_to_anchor=(.5, -.12), ncol=3, frameon=False, fontsize=9)
     figures["channels"] = save(fig, directory, "support_mix_by_area", "English reading labels; published labels in parentheses. Other / missing retains remaining channels; each row totals 100%.")
 
     geo = tables["areas"].head(10).iloc[::-1]
-    fig, ax = plt.subplots(figsize=(12, 7))
-    bars = ax.barh(wrapped(geo["area"]), geo["missing_district_percent"], color=BARCELONA["terracotta"])
+    fig, ax = plt.subplots(figsize=(14, 9))
+    bars = ax.barh(wrapped([bilingual_label(value) for value in geo["area"]], 42), geo["missing_district_percent"], color=BARCELONA["terracotta"])
+    ax.tick_params(axis="y", labelsize=9)
     ax.bar_label(bars, labels=[f"{v:.1f}%" for v in geo["missing_district_percent"]], padding=5, fontsize=9)
-    style_axis(ax, "Geographic coverage depends on the request area", "Records missing district (%)")
+    style_axis(ax, "Which request categories lack district information?", "Records missing district (%)")
     ax.set_xlim(0, 115)
     figures["missingness"] = save(fig, directory, "geography_coverage", "Ten largest areas. A missing district may reflect a non-place-specific request; do not assign one by imputation.")
 
@@ -204,20 +221,20 @@ def create_figures(tables: dict[str, pd.DataFrame], directory: Path) -> dict[str
     fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
     x = np.arange(len(monthly))
     axes[0].bar(x, monthly["mean_daily_requests"], color=BARCELONA["sea"])
-    style_axis(axes[0], "The year-end cutoff limits which requests appear", ylabel="Mean records / calendar day")
-    axes[1].plot(x, monthly["p95_closure_lag_days"], marker="o", color=BARCELONA["terracotta"], label="Observed 95th percentile lag")
-    axes[1].plot(x, monthly["median_closure_lag_days"], marker="o", color=BARCELONA["green"], label="Observed median lag")
-    style_axis(axes[1], "", "Registration month", "Recorded closure lag (days)")
+    style_axis(axes[0], "Requests marked closed after 2025 are missing from this view", ylabel="Mean records / calendar day")
+    axes[1].plot(x, monthly["p95_closure_lag_days"], marker="o", color=BARCELONA["terracotta"], label="Time within which about 95% were marked closed")
+    axes[1].plot(x, monthly["median_closure_lag_days"], marker="o", color=BARCELONA["green"], label="Time for the middle request (median)")
+    style_axis(axes[1], "", "Registration month", "Days until marked closed")
     axes[1].set_xticks(x, [pd.Timestamp(m).strftime("%b") for m in monthly["month"]])
     axes[1].set_ylim(bottom=0)
     axes[1].legend(frameon=False, fontsize=9)
-    axes[1].text(.98, .95, "A 1 Dec registration can contribute at most 30 days of lag.\nA 31 Dec registration can contribute only 0 days.", transform=axes[1].transAxes, ha="right", va="top", fontsize=9)
+    axes[1].text(.98, .95, "Registered on 1 Dec: must be marked closed within 30 days to appear.\nRegistered on 31 Dec: must be marked closed that same day.", transform=axes[1].transAxes, ha="right", va="top", fontsize=9)
     figures["selection"] = save(fig, directory, "cohort_selection", "Declines can reflect the closure-year selection. These charts do not establish falling demand or faster service.")
 
     types = tables["request_type_monthly"].set_index("month")
     types = types.div(types.sum(axis=1), axis=0).mul(100).T
     types.columns = [pd.Timestamp(month).strftime("%b") for month in types.columns]
-    figures["types"] = heatmap(types, "Published request-type labels change during the year", "Share of observed records in month (%)", directory, "request_type_labels", "Source labels are preserved. Do not read INCIDENCIA declining and ISSUE rising as a change in reported issue type.", percent=True)
+    figures["types"] = heatmap(types, "Published names for request types change during 2025", "Share of observed records in month (%)", directory, "request_type_labels", "Source labels are preserved. Do not read INCIDENCIA declining and ISSUE rising as a change in reported issue type.", percent=True)
     return figures
 
 

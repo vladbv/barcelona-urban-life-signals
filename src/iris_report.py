@@ -110,7 +110,7 @@ def write_reports(frame: pd.DataFrame, tables: dict, figures: dict, args) -> Non
         "District and channel compositions retain every record in their displayed group, using Other / missing for omitted categories. District composition excludes missing districts explicitly.",
         "Lags are calendar-day differences between published dates, not working days or verified resolution times. The histogram has unequal-width groups and an explicit >60-day group.",
         "Scatter plots include every day with defined lag; Pearson correlation is descriptive only. No minimum-volume threshold or statistical significance claim is used.",
-        "Source labels remain in Catalan/English for traceability. Descriptions translate the broad meaning; they do not replace the source categories.",
+        "Charts show English reading labels alongside original request-category names. These translations explain the broad meaning; they do not merge source categories or change the underlying tables.",
         "The monthly table also includes closures_all_export, which counts all deduplicated closures including earlier registrations. It uses a different cohort from the headline registration counts.",
     ]
     markdown = [
@@ -136,7 +136,7 @@ def write_reports(frame: pd.DataFrame, tables: dict, figures: dict, args) -> Non
     cards = "".join(f'<div class="metric"><strong>{value}</strong><span>{label}</span></div>' for value, label in [
         (f"{len(cohort):,}", "registered & closed in 2025"),
         (f"{cohort['district'].isna().mean() * 100:.1f}%", "missing district"),
-        (f"{cohort['closure_lag_days'].median():.0f} days", "median recorded closure lag"),
+        (f"{cohort['closure_lag_days'].median():.0f} days", "days until marked closed (median)"),
     ])
     contents = []
     for i, section in enumerate(sections, 1):

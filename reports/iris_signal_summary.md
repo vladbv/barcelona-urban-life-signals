@@ -14,18 +14,18 @@ We are looking at 278,628 citizen reports registered and closed in 2025. Reporti
 
 Start with the bold takeaway below each plot. Then read how the chart works, what the numbers show, and why it matters. The last paragraph explains what we cannot conclude. This keeps evidence, explanation, and everyday human context together: ethos, logos, and pathos. Examples describe possible situations, not individual people identified in the data.
 
-| Word                 | Plain meaning                                                                                                                                             |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Request / report     | One published IRIS entry. Several entries can concern the same issue.                                                                                     |
-| Cohort               | The group we chose to study: here, requests registered and closed in 2025.                                                                                |
-| Registration date    | When a request entered the system; the issue may have started earlier.                                                                                    |
-| Recorded closure lag | Calendar days from registration to administrative closure. Closure does not prove the issue was resolved.                                                 |
-| Median               | The middle value when values are put in order. At least half are at or below it.                                                                          |
-| 95th percentile      | A value that at least 95 out of 100 observed values do not exceed; about 5 out of 100 are higher.                                                         |
-| Share / percentage   | How many out of every 100 records in the stated group. A larger share need not mean more reports.                                                         |
-| Correlation          | A score from −1 to +1 for how two quantities move together in a straight-line pattern. Near zero means little such pattern, not proof of no relationship. |
+| Word                                   | Plain meaning                                                                                                                                                             |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Request / report                       | One entry sent to the council and published in IRIS: for example an incident report, complaint, inquiry or suggestion. Several entries can concern the same issue.        |
+| Cohort                                 | The group we chose to study: here, requests registered and closed in 2025.                                                                                                |
+| Registration date                      | When a request entered the system; the issue may have started earlier.                                                                                                    |
+| Time until marked closed (closure lag) | Calendar days between a request entering IRIS and its recorded closing date. Marked closed is an administrative status; it does not prove the underlying issue was fixed. |
+| Median                                 | The middle value when values are put in order. At least half are at or below it.                                                                                          |
+| 95th percentile                        | A value that at least 95 out of 100 observed values do not exceed; about 5 out of 100 are higher.                                                                         |
+| Share / percentage                     | How many out of every 100 records in the stated group. A larger share need not mean more reports.                                                                         |
+| Correlation                            | A score from −1 to +1 for how two quantities move together in a straight-line pattern. Near zero means little such pattern, not proof of no relationship.                 |
 
-## 1. The rhythm of asking the city for help
+## 1. When residents submit requests to the council
 
 ![Daily observed requests and their trailing seven-day average across 2025.](figures/iris_daily_registration_volume.png)
 
@@ -33,7 +33,7 @@ Start with the bold takeaway below each plot. Then read how the chart works, wha
 
 *How to read it: The gold line counts records by registration date; the blue line averages seven complete calendar days so the broader movement is easier to see.*
 
-The line rises and falls repeatedly through a year containing 278,628 reports. The median day has 784; the largest daily count is 1,572, on 3 July. Those sharp teeth invite us to look for a weekly reporting rhythm before searching for exceptional events.
+The line rises and falls repeatedly through a year containing 278,628 reports. The median day has 784; the largest daily count is 1,572, on 3 July. The repeated rises and falls suggest checking weekday patterns before treating a busy day as an unusual event.
 
 Submitting a request is one way to bring an everyday concern to the council's attention. Seen together, these records show when that contact enters IRIS. The blue line helps us follow the changing pace without letting a single busy day dominate the story.
 
@@ -59,7 +59,7 @@ A registration date tells us when a request entered the system, not when the und
 
 </details>
 
-## 2. Reporting follows the working week
+## 2. More requests are registered on weekdays
 
 ![Mean requests per calendar weekday, with weekends lower than Monday through Friday.](figures/iris_weekday_pattern.png)
 
@@ -88,7 +88,7 @@ The records do not measure opening hours, people's schedules, or all unreported 
 
 </details>
 
-## 3. The calendar gives each day a context
+## 3. How request counts vary by month and weekday
 
 ![Month-by-weekday heatmap of mean daily reports; darker cells indicate higher counts.](figures/iris_month_weekday_heatmap.png)
 
@@ -122,13 +122,13 @@ Each square averages only four or five days. Holidays and a few unusual days can
 
 </details>
 
-## 4. December shows the edge of the dataset
+## 4. Why late-year requests are missing from this view
 
 ![Monthly mean report counts and recorded closure lags, with an explanation of the December cutoff.](figures/iris_cohort_selection.png)
 
 **Takeaway: Late-year requests that closed after 31 December are absent from this file.**
 
-*How to read it: The upper panel shows mean daily reports by registration month. Below it are the median recorded closure lag and the 95th percentile, the point at or below which 95% of observed lags fall.*
+*How to read it: The top panel shows the average number of requests registered per day in each month. The lower panel measures days until requests were marked closed: one line shows the middle time (median), and the other the time within which about 95 out of 100 requests were marked closed.*
 
 The observed daily mean is highest in July, at 1,035; December's is 503. December also has a median lag of 2 days. These lower numbers are tempting to read as less pressure or faster service, but the file has a fixed boundary: every included request closed by 31 December.
 
@@ -156,17 +156,17 @@ This boundary can lower both the observed count and the observed lag late in the
 
 </details>
 
-## 5. Much of the conversation concerns shared public space
+## 5. Cleaning and street maintenance account for most requests
 
 ![The largest request areas, led by cleaning and collection and public-space maintenance.](figures/iris_top_request_areas.png)
 
 **Takeaway: Cleaning and public-space maintenance make up about 56 out of every 100 reports studied here.**
 
-*How to read it: Bar length shows the number of reports in each displayed request area. The percentage beside it uses all headline records as its denominator, including areas outside the chart.*
+*How to read it: Each bar shows how many requests concern a particular council service or topic. English labels appear first, followed by the published labels in parentheses. A label of 31.5% means about 32 of every 100 requests in the study; the percentages include categories not shown among these 12 bars.*
 
-Cleaning and collection (Recollida i neteja de l'espai urbà) account for 87,738 reports. Public-space maintenance (Manteniment de l'espai urbà) adds 68,491. Together that is 56.1% of the cohort: more than half of the records in this view concern these two areas.
+Cleaning and collection (Recollida i neteja de l'espai urbà) account for 87,738 reports. Public-space maintenance (Manteniment de l'espai urbà) adds 68,491. Together that is 56.1% of the requests studied: more than half of the records in this view concern these two areas.
 
-Street cleanliness, pavements, and the upkeep of shared spaces are close to everyday city life. Their prominence makes this a concrete place to begin asking what citizens bring to the council's attention. It grounds the next analytical question in recognisable concerns about places people share.
+Each entry records contact with the council about a service or topic. Cleaning and maintenance concern places people use every day: pavements, streets and other public spaces. Their large share tells us that caring for those places is a major part of the contact recorded in this file. The other bars include inquiries and administrative matters as well as reports of problems.
 
 Frequency is not a measure of severity. Several reports may refer to the same issue, and difficult or poorly reported problems may occupy small bars. The plot describes the published requests, not a ranking of everything that matters to Barcelona's residents.
 
@@ -190,7 +190,7 @@ Frequency is not a measure of severity. Several reports may refer to the same is
 
 </details>
 
-## 6. Many reports have no district on the map
+## 6. Almost one in three requests has no recorded district
 
 ![Counts by district, keeping the large missing-district group visible alongside named districts.](figures/iris_district_distribution.png)
 
@@ -223,7 +223,7 @@ A higher district count does not establish greater need, more problems per resid
 
 </details>
 
-## 7. Geography is missing for different kinds of requests
+## 7. Some request categories have much less location information
 
 ![Percentage of records missing district in the ten largest request areas; coverage differs sharply by area.](figures/iris_geography_coverage.png)
 
@@ -257,19 +257,19 @@ The file does not establish why any individual location is absent. We should nei
 
 </details>
 
-## 8. Districts differ in the mix of requests we can place
+## 8. What types of requests are recorded in each district
 
 ![Request-area shares within each known district, including all smaller areas in Other / missing.](figures/iris_district_area_mix_heatmap.png)
 
-**Takeaway: Districts differ in the mix of reports received; these percentages do not rank districts from best to worst.**
+**Takeaway: This compares the topics of requests within each district. It does not rank districts or neighbourhoods from best to worst.**
 
-*How to read it: Read across a district's row. Its percentages describe how that district's observed reports are divided among request areas; each row totals 100% before rounding.*
+*How to read it: Each row is a district, not an individual neighbourhood. Read across it as 100 requests assigned to that district: each cell shows how many out of those 100 fall into a request category. Darker means a larger share of reports, not worse living conditions. Each row totals 100% before rounding; English category labels appear above the original names.*
 
 In Ciutat Vella, cleaning accounts for 58.7% of located reports and maintenance for 20.5%. In Horta-Guinardó, the corresponding shares are 35.6% and 47.0%. The balance of these two large categories is visibly different.
 
-This invites a more specific local conversation: what kinds of concerns are reaching the council from each district? Looking at composition helps us see differences that a single citywide total would hide, while avoiding the assumption that every district's reported needs look alike.
+This chart answers what people contact the council about in each district. That can help someone preparing a local discussion pay attention to the topics most often raised there. It does not answer which district is the best place to live, which has the cleanest streets, or which provides the best service.
 
-A larger share of cleaning reports does not establish dirtier streets. A share can rise because other types of requests fall, and this chart excludes records with no district. It contains no adjustment for residents, visitors, or willingness and ability to report.
+For example, 40 cleaning requests out of 100 total is 40%; the same 40 cleaning requests out of 80 total is 50%. The share increased without any extra cleaning requests. A larger share therefore does not establish dirtier streets, and this chart excludes records with no district. It contains no adjustment for residents, visitors, or willingness and ability to report.
 
 <details>
 <summary>Inspect supporting data: iris_district_area_shares.csv (first 12 rows)</summary>
@@ -289,7 +289,7 @@ A larger share of cleaning reports does not establish dirtier streets. A share c
 
 </details>
 
-## 9. The route into the system shapes what becomes visible
+## 9. How requests reach the council: mobile, web and telephone
 
 ![Reporting-channel shares within request areas, with mobile prominent for cleaning and web for the administrative portal.](figures/iris_support_mix_by_area.png)
 
@@ -319,19 +319,19 @@ These records do not identify who could not use a channel or why a channel was c
 
 </details>
 
-## 10. A typical closure time leaves a long tail out of view
+## 10. How many days pass before a request is marked closed
 
 ![Counts in recorded closure-lag groups, retaining lags above 60 days in a separate final group.](figures/iris_closure_lag_histogram.png)
 
-**Takeaway: The middle recorded closure time is 3 days, but 3,779 requests took more than 60 days to close.**
+**Takeaway: Half the requests were marked closed within 3 days, but 3,779 took more than 60 days. Marked closed does not necessarily mean the issue was fixed.**
 
-*How to read it: Bars count records in labelled calendar-day ranges, which have unequal widths. The final >60 bar contains every longer lag; its height is a count, not a rate per day.*
+*How to read it: Count calendar days from the date a request entered IRIS to the date it was marked closed. For example, 1 March to 4 March is 3 days; 0 means both dates are the same. Each bar counts requests in the stated range. The final More than 60 bar includes every request taking longer than 60 days, so the ranges are not equally wide.*
 
-The median recorded lag is 3 days: at least half the selected records close within that interval. The 95th percentile is 32 days, and 3,779 records (1.4%) take more than 60 days. The maximum in this 2025-registration cohort is 286 days.
+Half the requests were marked closed within 3 days. About 95 out of every 100 were marked closed within 32 days. But 3,779 requests (1.4%) took more than 60 days, and the longest interval in this group was 286 days.
 
-Three days is a useful description of the middle of this distribution, but it says little about the people whose requests remain in the administrative process much longer. Showing the tail keeps those less typical cases in the conversation instead of allowing one reassuring central number to stand for everyone.
+A single typical time can hide very different experiences. Some requests stay in the administrative process for weeks or months. Statisticians call this smaller group of much longer times a long tail. Here it is visible in the bars on the right, including More than 60; it is not left out of the chart. Showing it helps us remember the people whose requests took much longer to be marked closed.
 
-A recorded closure is not proof that the person considered the issue resolved. Still-open requests are absent, and late-year registrations have less time to contribute long lags. The full export's longer maximum of 580 days includes earlier registrations and belongs to a different comparison.
+Marked closed does not necessarily mean the street was repaired, the question was answered satisfactorily, or the person considered the issue resolved. Still-open requests and requests closed after 2025 are absent, so this chart cannot describe how long every resident waited. The full export's longer maximum of 580 days includes earlier registrations and belongs to a different comparison.
 
 <details>
 <summary>Inspect supporting data: iris_closure_lag.csv (first 12 rows)</summary>
@@ -348,13 +348,13 @@ A recorded closure is not proof that the person considered the issue resolved. S
 
 </details>
 
-## 11. Different requests have different closure timelines
+## 11. Time until a request is marked closed varies by category
 
 ![Median recorded closure lag by leading request area, with dot size and labels showing report counts.](figures/iris_area_volume_vs_lag.png)
 
 **Takeaway: A single citywide closure-time figure cannot describe every kind of request fairly.**
 
-*How to read it: A dot farther to the right means a longer median lag. Dot size and the adjacent number show report volume; the chart covers the twelve largest request areas.*
+*How to read it: Each row is a request category, labelled in English and the original language. A dot farther right means more days between registration and being marked closed for the middle request in that category (the median). Larger dots and their numbers mean more requests, not longer times. The chart covers the 12 most frequent categories.*
 
 Cleaning has a median recorded lag of 3 days, and maintenance 3 days. Mobility (Mobilitat) has a median of 7 days, and prevention and safety (Prevenció i seguretat) 15 days. The categories with the largest volumes are not automatically those with the longest medians.
 
@@ -382,17 +382,17 @@ This is not a league table of good and bad service. The records do not make comp
 
 </details>
 
-## 12. Busy days do not tell the whole story of closure lag
+## 12. Daily request counts and time until closure
 
 ![Daily observed report counts against median closure lag, coloured by the share missing district.](figures/iris_daily_volume_vs_closure_lag.png)
 
 **Takeaway: Knowing how many reports arrived on a day tells us little about their typical recorded closure time in this comparison.**
 
-*How to read it: Each dot is a registration day: left to right is its report count, and bottom to top is the median eventual recorded lag of those requests. Colour shows that day's percentage of records missing district.*
+*How to read it: Each dot represents the requests registered on one day. Further right means more requests arrived that day. Higher means more days passed before the middle request in that group was marked closed (the median). Colour shows the percentage without a recorded district.*
 
 Across 365 observed days, the correlation is 0.11. This measure describes how consistently the two quantities move together in a straight-line pattern. A value close to zero, as here, indicates little such alignment; the dots do not form a clear rising line.
 
-It is understandable to wonder whether more incoming requests mean longer waits. In this view, daily volume alone gives only a weak guide to the median lag. That directs attention to more specific questions about the kinds of requests received and the processes they enter.
+It is understandable to wonder whether more incoming requests mean longer waits. Here, the number of requests registered in a day gives little indication of the time until the middle request in that group was marked closed. That directs attention to more specific questions about the kinds of requests received and the processes they enter.
 
 The vertical axis is not how long that day's workload took to clear, and the plot does not measure backlog or staffing. Daily medians can hide long individual lags. Calendar effects, request mix, and the closure-year cutoff remain unadjusted, so a weak correlation cannot prove that workload has no effect.
 
@@ -416,13 +416,13 @@ The vertical axis is not how long that day's workload took to clear, and the plo
 
 </details>
 
-## 13. The labels change, so the story needs a pause
+## 13. Changing category names can mislead comparisons over time
 
 ![Monthly shares of unmerged source request-type labels, showing a transition from Catalan to English labels late in 2025.](figures/iris_request_type_labels.png)
 
 **Takeaway: A change in published labels can look like a change in city problems unless we check the definitions.**
 
-*How to read it: Rows are request-type labels exactly as published; columns are registration months. Each cell is that label's share of the month's records. A <1% label indicates a small nonzero share.*
+*How to read it: Rows keep each published request-type label separate, with an English reading label where needed; columns are registration months. Each cell is that label's share of the month's records. A <1% label indicates a small nonzero share.*
 
 October contains 0 records labelled INCIDENCIA and 17,071 labelled ISSUE. Other apparent Catalan/English counterparts shift as well, and October–December uses the English labels. The timing suggests a change in publication or classification, although this file does not explain it.
 
@@ -458,7 +458,7 @@ We preserve both labels and do not merge apparent translations without a documen
 - District and channel compositions retain every record in their displayed group, using Other / missing for omitted categories. District composition excludes missing districts explicitly.
 - Lags are calendar-day differences between published dates, not working days or verified resolution times. The histogram has unequal-width groups and an explicit >60-day group.
 - Scatter plots include every day with defined lag; Pearson correlation is descriptive only. No minimum-volume threshold or statistical significance claim is used.
-- Source labels remain in Catalan/English for traceability. Descriptions translate the broad meaning; they do not replace the source categories.
+- Charts show English reading labels alongside original request-category names. These translations explain the broad meaning; they do not merge source categories or change the underlying tables.
 - The monthly table also includes closures_all_export, which counts all deduplicated closures including earlier registrations. It uses a different cohort from the headline registration counts.
 
 ## What comes next

@@ -144,3 +144,18 @@ Status: exploratory 2025 comparison complete (2026-10-06).
 Reproduce with `python -m src.neighbourhood_quadrants --download` (downloads only
 missing originals), or omit `--download` for an offline rebuild. No dependencies
 added. The existing weather milestone remains separate.
+
+## Reading-guide clarity update — 2026-10-13
+
+- [x] Use concrete titles across the 13-plot tour and explain requests as entries
+      submitted to the council, including reports, inquiries and suggestions.
+- [x] Add English reading labels beside published category names throughout the
+      category charts, preserving the original data and category distinctions.
+- [x] Explain district percentages with a simple example and state that they do
+      not rank district or neighbourhood quality.
+- [x] Define time until marked closed using dates, distinguish administrative
+      closure from resolution, and explain longer times without relying on jargon.
+
+The shared interpretations continue to pair numerical evidence (logos), clear
+sources and limitations (ethos), and concrete relevance to residents (pathos).
+Rebuild README, plots and reports with the existing exploration command.
