@@ -8,7 +8,6 @@ import html
 import json
 import os
 import platform
-import re
 from pathlib import Path
 
 import matplotlib
@@ -37,8 +36,8 @@ def plot_markdown(section: dict, number: int, figures: dict, parent: Path, headi
     return "\n\n".join(paragraphs)
 
 
-def update_readme(path: Path, sections: list[dict], figures: dict) -> None:
-    """Replace only the explicitly marked plot tour; preserve the authored README."""
+def update_readme(path: Path, tables: dict, figures_dir: Path) -> None:
+    """Refresh only the three selected findings; preserve the concise authored overview."""
     original = path.read_text(encoding="utf-8")
     if original.count(README_START) != 1 or original.count(README_END) != 1:
         raise ValueError(f"{path} must contain one {README_START} and one {README_END} marker.")
@@ -46,18 +45,8 @@ def update_readme(path: Path, sections: list[dict], figures: dict) -> None:
     end = original.index(README_END)
     if end < start:
         raise ValueError(f"Plot-reading markers are out of order in {path}.")
-    navigation = []
-    for i, section in enumerate(sections, 1):
-        slug = re.sub(r"[^\w -]", "", section["title"].lower()).replace(" ", "-")
-        navigation.append(f"[{i}. {section['title']}](#{i}-{slug})")
-    body = "\n\n".join([
-        "## A walk through the plots", READING_APPROACH,
-        "#### A few words, explained simply",
-        markdown_table(pd.DataFrame(READING_GLOSSARY, columns=["Word", "Plain meaning"])),
-        "All thirteen plots are shown below. Follow the story in order, or jump to a reading:",
-        "\n".join(f"- {link}" for link in navigation),
-        *(plot_markdown(section, i, figures, path.parent, "###") for i, section in enumerate(sections, 1)),
-    ])
+    from src.iris_highlights import readme_highlights
+    body = readme_highlights(tables, figures_dir, path.parent)
     path.write_text(original[:start] + "\n\n" + body + "\n\n" + original[end:], encoding="utf-8")
 
 
@@ -128,7 +117,7 @@ def write_reports(frame: pd.DataFrame, tables: dict, figures: dict, args) -> Non
             markdown_table(tables[section["table"]].head(12).round(2)), "</details>",
         ])
     markdown.extend(["## Reproducible methods", "\n".join(f"- {method}" for method in methods),
-                     "## What comes next", "Before weather integration, inspect adjacent closure-year resources and document a common observation window. Validate request-type label mappings against publisher metadata. Then define a specific weather question and an appropriate station/time resolution. No weather effect, recurring seasonality, causal claim, or forecast is established by this report.",
+                     "## What comes next", "The adjacent-year audit and fixed follow-up rules are documented in iris_observation_windows.md. Request-type mappings remain unverified. Then define a specific weather question and an appropriate station/time resolution. No weather effect, recurring seasonality, causal claim, or forecast is established by this report.",
                      "## Data and provenance", f"Aggregate tables: `{args.tables_dir}`. Standalone HTML: `{args.html_path}`. Input fingerprints and generation rules: `{args.manifest_path}`.",
                      f"Processed SHA-256: `{manifest['processed_input']['sha256']}`."])
 
@@ -182,7 +171,7 @@ figcaption{{color:var(--muted);font-size:.92rem;padding:12px 0}}.boundary{{borde
 <p>Source: <a href="{SOURCE_URL}">Open Data BCN · IRIS</a>. Resource ID: <code>{RESOURCE_ID}</code>.</p>
 <p>{len(frame):,} deduplicated records; {len(frame) - len(cohort):,} earlier registrations retained outside the headline cohort. No weather data or causal model has been fitted.</p>
 <p>Processed input SHA-256: <code>{manifest['processed_input']['sha256']}</code>.</p>
-<p>Next: inspect adjacent closure-year resources, define comparable follow-up windows, and validate source label mappings before adding weather context.</p></section>
+<p>The separate observation-window audit checks adjacent-year closures and defines fixed follow-up periods. Category mappings remain unverified; weather integration is still a next step.</p></section>
 <footer>Generated from the local inspected snapshot with Python {platform.python_version()}, pandas {pd.__version__}, matplotlib {matplotlib.__version__}. Reported citizen activity is not complete ground truth about Barcelona.</footer>
 </main></body></html>'''
     for path, content in [
@@ -193,4 +182,4 @@ figcaption{{color:var(--muted);font-size:.92rem;padding:12px 0}}.boundary{{borde
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
     if args.readme_path is not None:
-        update_readme(args.readme_path, sections, figures)
+        update_readme(args.readme_path, tables, args.figures_dir)

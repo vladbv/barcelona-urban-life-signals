@@ -71,10 +71,10 @@ def plot_readings(frame: pd.DataFrame, tables: dict[str, pd.DataFrame]) -> list[
 
     stories = [
         {
-            "title": "When residents submit requests to the council",
+            "title": "Daily requests recorded by Barcelona City Council in 2025",
             "figures": ["daily"], "table": "daily",
             "alt": "Daily observed requests and their trailing seven-day average across 2025.",
-            "how_to_read": "The gold line counts records by registration date; the blue line averages seven complete calendar days so the broader movement is easier to see.",
+            "how_to_read": "Source: the council’s Open Data BCN IRIS export. Each point on the gold line counts requests registered on that date and marked closed by year-end. These include incident reports, complaints and inquiries. The blue line averages the latest seven days to make the overall pattern easier to see.",
             "finding": (
                 f"The line rises and falls repeatedly through a year containing {len(cohort):,} "
                 f"reports. The median day has {daily['requests'].median():,.0f}; the largest daily "

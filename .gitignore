@@ -27,3 +27,7 @@ reports/figures/*
 !reports/figures/iris_later_closures.png
 
 !reports/figures/neighbourhood_living_quadrants.png
+
+!reports/figures/iris_highlight_topics.png
+!reports/figures/iris_highlight_weekdays.png
+!reports/figures/iris_highlight_location.png

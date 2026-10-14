@@ -25,13 +25,13 @@ Start with the bold takeaway below each plot. Then read how the chart works, wha
 | Share / percentage                     | How many out of every 100 records in the stated group. A larger share need not mean more reports.                                                                         |
 | Correlation                            | A score from −1 to +1 for how two quantities move together in a straight-line pattern. Near zero means little such pattern, not proof of no relationship.                 |
 
-## 1. When residents submit requests to the council
+## 1. Daily requests recorded by Barcelona City Council in 2025
 
 ![Daily observed requests and their trailing seven-day average across 2025.](figures/iris_daily_registration_volume.png)
 
 **Takeaway: Report counts change through the year and repeatedly rise and fall within each week.**
 
-*How to read it: The gold line counts records by registration date; the blue line averages seven complete calendar days so the broader movement is easier to see.*
+*How to read it: Source: the council’s Open Data BCN IRIS export. Each point on the gold line counts requests registered on that date and marked closed by year-end. These include incident reports, complaints and inquiries. The blue line averages the latest seven days to make the overall pattern easier to see.*
 
 The line rises and falls repeatedly through a year containing 278,628 reports. The median day has 784; the largest daily count is 1,572, on 3 July. The repeated rises and falls suggest checking weekday patterns before treating a busy day as an unusual event.
 
@@ -463,7 +463,7 @@ We preserve both labels and do not merge apparent translations without a documen
 
 ## What comes next
 
-Before weather integration, inspect adjacent closure-year resources and document a common observation window. Validate request-type label mappings against publisher metadata. Then define a specific weather question and an appropriate station/time resolution. No weather effect, recurring seasonality, causal claim, or forecast is established by this report.
+The adjacent-year audit and fixed follow-up rules are documented in iris_observation_windows.md. Request-type mappings remain unverified. Then define a specific weather question and an appropriate station/time resolution. No weather effect, recurring seasonality, causal claim, or forecast is established by this report.
 
 ## Data and provenance
 

@@ -159,3 +159,18 @@ added. The existing weather milestone remains separate.
 The shared interpretations continue to pair numerical evidence (logos), clear
 sources and limitations (ethos), and concrete relevance to residents (pathos).
 Rebuild README, plots and reports with the existing exploration command.
+
+## Portfolio overview — 2026-10-14
+
+- [x] Put source, observation unit, sample selection and technical evidence before plots.
+- [x] Reduce the README to three findings with large English labels, direct values
+      and one limitation beside each interpretation.
+- [x] Keep all 13 detailed readings and the neighbourhood comparison in linked reports.
+- [x] Move installation, acquisition and reproduction details to REPRODUCING.md.
+- [x] Generate selected README charts from the existing validated summary tables;
+      the normal rebuild preserves the shorter overview.
+
+The daily-series title and reading now name the council, year, source and counted
+unit explicitly. Reviewed all 13 titles; retain the other plain-language titles
+in the full report. README images stay static; existing Streamlit filters provide
+adjustable views. No new dependencies, datasets or modelling scope.

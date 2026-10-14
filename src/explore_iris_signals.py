@@ -144,7 +144,7 @@ def create_figures(tables: dict[str, pd.DataFrame], directory: Path) -> dict[str
     fig, ax = plt.subplots(figsize=(12, 5.5))
     ax.plot(daily["registration_date"], daily["requests"], color=BARCELONA["tile"], alpha=.5, lw=1, label="Daily records")
     ax.plot(daily["registration_date"], daily["rolling_7_day"], color=BARCELONA["sea"], lw=2.5, label="Average over the latest 7 days")
-    style_axis(ax, "When residents submit requests to the council", "Registration date", "Observed requests")
+    style_axis(ax, "Daily requests recorded by Barcelona City Council in 2025", "Registration date", "Observed requests")
     ax.set_ylim(bottom=0)
     ax.legend(frameon=False)
     figures["daily"] = save(fig, directory, "daily_registration_volume", "Late-year records must close by 31 December to appear here; the year-end decline is not a demand estimate.")
@@ -258,7 +258,7 @@ def main() -> int:
     print(f"Wrote standalone report: {args.html_path}")
     print(f"Wrote reproducibility manifest: {args.manifest_path}")
     if args.readme_path is not None:
-        print(f"Updated README plot interpretations: {args.readme_path}")
+        print(f"Updated README with three compact highlight charts: {args.readme_path}")
     return 0
 
 
