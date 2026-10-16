@@ -174,3 +174,17 @@ The daily-series title and reading now name the council, year, source and counte
 unit explicitly. Reviewed all 13 titles; retain the other plain-language titles
 in the full report. README images stay static; existing Streamlit filters provide
 adjustable views. No new dependencies, datasets or modelling scope.
+
+## Course-to-project explanation — 2026-10-16
+
+- [x] Connect the author’s stated Master’s training to inspectable preparation,
+      descriptive analysis, observation checks and reproducibility.
+- [x] Document a proposed Bayesian count-model question and distinguish it from
+      implemented work in `reports/course_to_project.md`.
+- [ ] After source and calendar checks, assess whether a count model adds value:
+      state assumptions, check prior sensitivity and predictive fit, and evaluate
+      later dates with closure outcomes available at each training cutoff.
+
+This update changes documentation only. No Bayesian model, forecast, clustering
+or new data transformation is introduced. Course exercises and reference materials
+remain separate from the repository’s implemented results.

@@ -2,9 +2,10 @@
 
 **What can citizen requests tell us about Barcelona—and what do the records leave out?**
 
-A Python project that turns Barcelona City Council’s public request records
-into reproducible analysis. It examines reported concerns, reporting patterns
-and missing information before drawing conclusions about city life.
+Built on my **Master’s in Data Science, Statistics and Decision Analysis**,
+this Python project turns Barcelona City Council’s public request records into
+reproducible analysis. I examine reporting patterns and missing information
+before drawing conclusions that could affect how we understand residents’ needs.
 
 **Python · pandas · Matplotlib · Streamlit · automated tests**
 
@@ -25,14 +26,28 @@ and marked closed in 2025**. Earlier registrations stay in the prepared data.
 **Marked closed is an administrative status, not proof that an issue was fixed.**
 Requests still open or closed in another year are missing from this view.
 
-## Technical work you can inspect
+## From coursework to evidence
 
-- **Reproducible data preparation:** catalog discovery, preserved raw files,
-  inspected schemas and validated dates and identifiers. [Preparation code](src/prepare_iris_dataset.py).
-- **Careful comparisons:** full-calendar daily averages, explicit denominators
-  and retained missing locations. [Analysis code](src/iris_signals.py).
-- **Verifiable outputs:** source fingerprints, regression tests and charts
-  regenerated from shared calculations. [Tests](tests/) · [Source manifest](reports/iris_analysis_manifest.json).
+My training in **Machine Learning, Data Mining, Statistical Modelling and
+Bayesian Learning** informs how I approach the data:
+
+- **Prepare before predicting.** I preserve raw files, remove exact duplicates
+  and validate dates and identifiers. [Preparation code](src/prepare_iris_dataset.py).
+- **Check what a comparison measures.** I calculate averages per calendar day,
+  retain missing locations and investigate year-end selection.
+  [Analysis code](src/iris_signals.py) · [Observation audit](reports/iris_observation_windows.md).
+- **Make the work verifiable.** Shared calculations generate the plots and reports;
+  tests and source fingerprints support reproducibility.
+  [Tests](tests/) · [Source manifest](reports/iris_analysis_manifest.json).
+
+**Implemented:** descriptive analysis and data-quality checks.
+**Proposed Bayesian extension:** estimate uncertainty in comparable daily request
+counts. A *prior* states assumptions; the *likelihood* links a model to observed
+counts; the *posterior* updates those assumptions with data. *Posterior predictive
+checks* would test whether simulated counts resemble the observed pattern.
+Prior sensitivity and evaluation on later dates would test robustness.
+**No predictive or Bayesian model has been fitted yet.**
+[Course connections and modelling rationale](reports/course_to_project.md).
 
 <!-- BEGIN IRIS PLOT READINGS -->
 
