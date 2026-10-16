@@ -1,0 +1,90 @@
+{
+  "input": {
+    "path": "data/processed/observation_audit/iris_observed_2025_records.csv",
+    "sha256": "b0478194c45945d858165f84476ecba78755a33372aa23823a6651a18a245fba"
+  },
+  "source_audit": "reports/iris_observation_manifest.json",
+  "origin": "2025-10-01",
+  "observed_coverage_end": "2026-03-31",
+  "area": "Recollida i neteja de l'espai urbà",
+  "prior": {
+    "shape": 2.0,
+    "rate": 0.01
+  },
+  "seed": 20261016,
+  "draws": 50000,
+  "tree": {
+    "max_depth": 3,
+    "min_samples_leaf": 14
+  },
+  "features": [
+    "weekday",
+    "day_of_year"
+  ],
+  "versions": {
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "sklearn": "1.9.0"
+  },
+  "runs": {
+    "30": {
+      "train_start": "2025-01-01",
+      "train_end": "2025-08-31",
+      "train_days": 243,
+      "test_days": 92,
+      "coverage": 0.391304347826087
+    },
+    "90": {
+      "train_start": "2025-01-01",
+      "train_end": "2025-07-02",
+      "train_days": 183,
+      "test_days": 92,
+      "coverage": 0.2608695652173913
+    }
+  },
+  "metrics": [
+    {
+      "horizon_days": 30,
+      "model": "Weekday average",
+      "test_days": 92,
+      "MAE": 47.76033978808915,
+      "RMSE": 60.167927331147595
+    },
+    {
+      "horizon_days": 30,
+      "model": "Gamma–Poisson",
+      "test_days": 92,
+      "MAE": 47.76491440351163,
+      "RMSE": 60.17194485083904
+    },
+    {
+      "horizon_days": 30,
+      "model": "Decision tree",
+      "test_days": 92,
+      "MAE": 42.335093167701864,
+      "RMSE": 55.82848254409728
+    },
+    {
+      "horizon_days": 90,
+      "model": "Weekday average",
+      "test_days": 92,
+      "MAE": 62.93758516041124,
+      "RMSE": 75.59908442870444
+    },
+    {
+      "horizon_days": 90,
+      "model": "Gamma–Poisson",
+      "test_days": 92,
+      "MAE": 62.94104714609691,
+      "RMSE": 75.60301787363392
+    },
+    {
+      "horizon_days": 90,
+      "model": "Decision tree",
+      "test_days": 92,
+      "MAE": 129.5733695652174,
+      "RMSE": 146.32577874665563
+    }
+  ],
+  "selection_warning": "Selected observed closed requests; unknown publication delays and incomplete coverage. Retrospective test, not operational validation."
+}

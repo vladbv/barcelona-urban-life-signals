@@ -137,3 +137,27 @@ python -m src.neighbourhood_quadrants --download
 This downloads missing official source files only; the historical survey CSV is
 approximately 570 MB. Omit `--download` for an offline rebuild. Rent and resident
 satisfaction are separate from IRIS. See [sources, methods and all 73 neighbourhoods](reports/neighbourhood_living.md).
+
+## Reproduce the Bayesian and machine-learning comparison
+
+After preparing and auditing the two inspected exports above:
+
+```bash
+python -m src.model_iris_counts --help
+python -m src.model_iris_counts --readme-path README.md
+python -m unittest discover -s tests -v
+```
+
+The model command uses `data/processed/observation_audit/iris_observed_2025_records.csv`
+and downloads nothing. It writes aggregate training counts, predictions, metrics,
+posterior summaries and diagnostics to `data/processed/models/`, plus two plots,
+`reports/iris_model_comparison.md` and `reports/iris_model_manifest.json`.
+The README findings are regenerated inside their own marker pair; the original
+descriptive charts retain their separate 2025 closure-year population.
+
+The fixed October 1 prediction origin excludes training dates whose full 30-day
+or 90-day closure window has not ended. Features use calendar dates only. The
+settings, input fingerprint, package versions and simulation seed are recorded.
+No dependency beyond `requirements.txt` is needed. Historical publication delays
+remain unknown. Treat October–December as an already-inspected test period in
+future development; do not tune models against these published results.

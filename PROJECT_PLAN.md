@@ -181,10 +181,32 @@ adjustable views. No new dependencies, datasets or modelling scope.
       descriptive analysis, observation checks and reproducibility.
 - [x] Document a proposed Bayesian count-model question and distinguish it from
       implemented work in `reports/course_to_project.md`.
-- [ ] After source and calendar checks, assess whether a count model adds value:
+- [x] After source and calendar checks, assess whether a count model adds value:
       state assumptions, check prior sensitivity and predictive fit, and evaluate
       later dates with closure outcomes available at each training cutoff.
 
 This update changes documentation only. No Bayesian model, forecast, clustering
 or new data transformation is introduced. Course exercises and reference materials
 remain separate from the repository’s implemented results.
+
+## Requested modelling extension — 2026-10-16
+
+The documentation-only proposal above is now implemented following the request
+to demonstrate actual Machine Learning and Bayesian Learning skills.
+
+- [x] Define daily observed cleaning requests marked closed within 30 days;
+      retain zero-count calendar days and repeat with a 90-day definition.
+- [x] Fit a weekday-average baseline, independent weekday Gamma–Poisson models
+      and a fixed shallow decision tree using existing dependencies.
+- [x] Evaluate October–December 2025 with training labels matured before October 1.
+      State that historical publication availability cannot be reconstructed.
+- [x] Publish prior, likelihood and posterior plots, predictive coverage,
+      posterior predictive dispersion checks and prior sensitivity.
+- [x] Explain poor interval coverage and the tree’s reversal in the 90-day check;
+      retain those failures as evidence rather than tune against the test quarter.
+- [x] Add reproducible commands, source/settings manifest and model boundary tests.
+
+See `reports/iris_model_comparison.md`. This narrow retrospective benchmark is
+separate from the unfinished weather-source milestone. Any further model choices
+need validation inside training data and fresh evaluation data before operational
+claims. No neural network or additional dependency was needed.

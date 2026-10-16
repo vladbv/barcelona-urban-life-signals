@@ -1,67 +1,57 @@
-# From graduate training to a defensible city-data analysis
+# From graduate training to tested predictions
 
-The project draws on my Master’s in Data Science, Statistics and Decision
-Analysis. The practical question comes first: what can these records tell us
-about reported needs, and which conclusions would the data fail to support?
+My Master’s in Data Science, Statistics and Decision Analysis informs a practical
+question: can reported requests help us anticipate contact with the council?
+Unreliable estimates could hide busy days. This project checks that risk before
+suggesting an operational use.
 
-## Course connections and current evidence
+## Four courses, inspectable evidence
 
-| Training | Connection to this project | Status |
+| Training | Implemented work | What it demonstrates |
 | --- | --- | --- |
-| Machine Learning: preprocessing, pipelines and evaluation | Reproducible preparation and validation are implemented. A future predictor would fit preprocessing on training data only and be evaluated on later dates. | Preparation implemented; model training and evaluation planned. |
-| Data Mining: pattern discovery, clustering and anomaly detection | Current summaries expose weekday patterns, category changes and missing geography. Clustering or anomaly detection would require a defined question and validation; neither is currently implemented. | Descriptive exploration implemented. |
-| Statistical Modelling: distributions, likelihood and estimation | Counts and elapsed days are different outcomes. Denominators, population selection and the meaning of a recorded closure are defined before choosing a distribution. | Data and outcome checks implemented; likelihood-based modelling planned. |
-| Bayesian Learning: conjugacy, simulation and predictive distributions | A proposed count-model comparison would examine posterior uncertainty, prior sensitivity and predictive fit. | Proposed; no posterior estimates or Bayesian results published. |
+| Machine Learning | A shallow decision tree using weekday and day of year; comparison with a weekday-average baseline on later dates. | Model fitting, explicit features, temporal evaluation, MAE and RMSE. No tuning on the test quarter. |
+| Data Mining | Duplicate and identifier checks, weekday patterns, topic summaries, missing geography and a closure-window audit. | Pattern discovery with attention to sample selection. No clustering or anomaly detector is claimed. |
+| Statistical Modelling | A Poisson likelihood for daily observed counts, separate rates by weekday and variance-to-mean diagnostics. | Distributional assumptions must be checked against the variation in real data. |
+| Bayesian Learning | Gamma–Poisson conjugate updating, posterior credible intervals, predictive simulation, prior sensitivity and posterior predictive checks. | Parameter uncertainty differs from uncertainty about a new day’s count. Simulation error is recorded separately. |
 
-My Bayesian Learning exercises in R cover inverse-transform sampling, rejection
-sampling, importance sampling and Monte Carlo numerical error. This training
-provides a foundation for checking simulations. Other relevant course concepts
-include conjugate updating, posterior approximation and prediction. Coursework
-and proposed methods are separate from this repository’s implemented results.
+[Model implementation](../src/model_iris_counts.py) ·
+[Results, plots and methods](iris_model_comparison.md) ·
+[Observation audit](iris_observation_windows.md) · [Tests](../tests/).
 
-## One useful Bayesian question, after the observation and weather checks
+## Prior → likelihood → posterior → prediction
 
-How variable are daily counts of cleaning requests registered in 2025 and marked
-closed within 30 days? Repeat the comparison with a 90-day definition. The target
-is an observed, selected group of requests—not total demand or successful repairs.
+The **prior** describes possible daily rates before using the training counts.
+The **likelihood** measures how well a rate explains those counts under the
+Poisson assumption. The **posterior** combines both. Drawing a rate from that
+posterior, then a count from its Poisson distribution, gives a **posterior
+predictive simulation** for a new day.
 
-A **Gamma–Poisson** model could be a transparent conjugate reference model for
-comparable days: a Gamma prior for a Poisson rate gives a Gamma posterior.
-It would not, by itself, account for weekday differences, changing rates or
-serial dependence. Check those assumptions and whether variability exceeds the
-Poisson model’s conditional mean before treating it as useful.
+Here the prior is Gamma(shape=2, rate=0.01). For each weekday, observing a total
+of *S* requests over *n* training days gives Gamma(2 + S, 0.01 + n).
+This is an actual conjugate update, with seeded simulation used for intervals
+and model checks. The proper prior is a broad illustrative assumption; it is
+neither assumption-free nor elicited expert knowledge.
 
-The proposed analysis would:
+The result is instructive: the nominal 95% predictive intervals contain only
+39% of later days in the 30-day analysis. Training observations also vary more
+than replicated samples from the model. More precise estimation of a constant
+rate does not repair a poor model of daily variability.
 
-1. State the likelihood and justify a proper, weakly informative prior using
-   plausible request counts; compare alternative prior choices.
-2. Report posterior summaries and credible intervals for the modelled rate.
-   These quantify uncertainty conditional on the model and selected records.
-3. Use the posterior predictive distribution for new counts, incorporating both
-   parameter uncertainty and variation in observations. Predictive intervals
-   answer a different question from credible intervals for the rate.
-4. Check simulated patterns against observations, compare with a simple calendar
-   baseline and evaluate predictions on held-out later dates. A training request’s
-   closure outcome must already be observable at the simulated prediction date.
-5. If simulation is needed, assess Monte Carlo numerical error separately from
-   uncertainty about city activity. Neither can repair missing source coverage.
+The tree reduces average error in that analysis, but loses to the simple
+baseline in the 90-day check. That check changes both the outcome and available
+training dates. It does not establish a universally better model.
 
-This is a modelling proposal, not a change to the current descriptive milestone.
-A more complex model earns its place only if it answers the question better.
+## What these methods do not establish
 
-## Statistical distinctions that matter
+The target is observed cleaning requests marked closed within a fixed period,
+not all demand or successful repairs. Historical publication delays are unknown,
+so this is a retrospective benchmark, not a production simulation.
 
-- **Proper is not the same as uninformative.** A Gamma prior with positive shape
-  and rate is proper; how informative it is depends on its parameters and context.
-- **Uniform is not assumption-free.** Dirichlet(1, …, 1) is uniform on the simplex
-  in the usual probability coordinates. It is not a universally neutral prior;
-  assess sensitivity rather than describing it as “prior ignorance”.
-- **Observed and expected information differ.** Observed information is the
-  negative log-likelihood Hessian and may depend on observed data. Jeffreys’ prior
-  uses expected Fisher information, taking expectation under the model.
-- **Approximation needs checking.** A normal approximation around a posterior
-  mode can be misleading for skewed or boundary-constrained distributions.
-  Conjugate calculations, a grid or simulation can provide checks when applicable.
+The decision tree needs no activation function. Neural networks, clustering,
+Jeffreys’ priors and posterior approximations are not implemented here; they
+would need a question that justifies them. The coursework R exercises informed
+the simulation checks but are not copied into the project.
 
-See the [project plan](../PROJECT_PLAN.md), [implemented analysis](../src/iris_signals.py)
-and [observation-window audit](iris_observation_windows.md) for the current evidence.
+Next modelling work should investigate changing rates and overdispersion using
+validation periods within training data. The October–December test quarter has
+now been seen and must not become a tuning target.

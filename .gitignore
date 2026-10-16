@@ -31,3 +31,5 @@ reports/figures/*
 !reports/figures/iris_highlight_topics.png
 !reports/figures/iris_highlight_weekdays.png
 !reports/figures/iris_highlight_location.png
+!reports/figures/iris_bayesian_update.png
+!reports/figures/iris_model_holdout.png

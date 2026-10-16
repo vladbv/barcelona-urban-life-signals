@@ -7,7 +7,7 @@ this Python project turns Barcelona City Council’s public request records into
 reproducible analysis. I examine reporting patterns and missing information
 before drawing conclusions that could affect how we understand residents’ needs.
 
-**Python · pandas · Matplotlib · Streamlit · automated tests**
+**Python · pandas · scikit-learn · Bayesian inference · Matplotlib · automated tests**
 
 [Full analysis](reports/iris_signal_summary.md) ·
 [Downloadable report](reports/iris_exploration.html) ·
@@ -36,18 +36,14 @@ Bayesian Learning** informs how I approach the data:
 - **Check what a comparison measures.** I calculate averages per calendar day,
   retain missing locations and investigate year-end selection.
   [Analysis code](src/iris_signals.py) · [Observation audit](reports/iris_observation_windows.md).
-- **Make the work verifiable.** Shared calculations generate the plots and reports;
-  tests and source fingerprints support reproducibility.
-  [Tests](tests/) · [Source manifest](reports/iris_analysis_manifest.json).
+- **Test predictions on later dates.** Compare a decision tree and a Bayesian
+  count model with a weekday-average baseline. Check prediction errors,
+  uncertainty and sensitivity to assumptions. [Model code](src/model_iris_counts.py).
+- **Make the work verifiable.** Shared calculations generate plots and reports;
+  [tests](tests/) and [source fingerprints](reports/iris_model_manifest.json)
+  support reproducibility.
 
-**Implemented:** descriptive analysis and data-quality checks.
-**Proposed Bayesian extension:** estimate uncertainty in comparable daily request
-counts. A *prior* states assumptions; the *likelihood* links a model to observed
-counts; the *posterior* updates those assumptions with data. *Posterior predictive
-checks* would test whether simulated counts resemble the observed pattern.
-Prior sensitivity and evaluation on later dates would test robustness.
-**No predictive or Bayesian model has been fitted yet.**
-[Course connections and modelling rationale](reports/course_to_project.md).
+[How the four courses connect to implemented work](reports/course_to_project.md).
 
 <!-- BEGIN IRIS PLOT READINGS -->
 
@@ -82,6 +78,37 @@ Some requests concern administrative services rather than a specific place. **Mi
 [Explore all 13 plots, English category labels and detailed interpretations](reports/iris_signal_summary.md).
 
 <!-- END IRIS PLOT READINGS -->
+
+<!-- BEGIN IRIS MODEL FINDINGS -->
+
+## Predicting requests means testing uncertainty, too
+
+This experiment uses **cleaning requests marked closed within 30 days**, combining
+the two audited exports. It is a different group from the descriptive charts above.
+
+![Observed later counts, Bayesian predictive intervals and errors from three models](reports/figures/iris_model_holdout.png)
+
+**The Bayesian model’s nominal 95% intervals cover only 39% of test days.**
+Its *prior* starts with a broad range of possible daily rates. The *Poisson likelihood*
+connects those rates to training counts. The *posterior* updates the rates; the
+*posterior predictive distribution* describes possible counts on a new day.
+The missed observations show why a precise average is not enough for planning.
+
+On the same October–December test, the **decision tree** misses by an average of
+**42.3 requests/day**, versus **47.8** for a simple weekday average
+and **47.8** for the Bayesian mean. Lower is better.
+Training excludes dates whose 30-day outcomes would not yet be known.
+No model was tuned on these test results.
+
+**The tree’s advantage does not hold in the 90-day check:** its average error rises
+to 129.6, versus 62.9 for the weekday average.
+That check changes both the counted requests and the available training period.
+
+This is a retrospective benchmark of selected reported activity, not a reliable
+operational forecast. [See the prior–likelihood–posterior plot, predictive checks,
+90-day sensitivity and reproducible methods](reports/iris_model_comparison.md).
+
+<!-- END IRIS MODEL FINDINGS -->
 
 ## A finding that changed the analysis
 
@@ -121,9 +148,11 @@ With the inspected data prepared locally:
 
 ```bash
 python -m src.explore_iris_signals --readme-path README.md
+python -m src.audit_iris_observation
+python -m src.model_iris_counts --readme-path README.md
 python -m unittest discover -s tests -v
 ```
 
-Current scope: descriptive analysis and data-quality checks. Next: inspect a
-weather source for a narrowly defined comparison. No causal or forecasting
-claims are made. [Project plan](PROJECT_PLAN.md).
+Current scope: descriptive analysis, data-quality checks and retrospective model
+evaluation. The models are not validated for operational use. Weather comparisons
+remain a separate next step. [Project plan](PROJECT_PLAN.md).
