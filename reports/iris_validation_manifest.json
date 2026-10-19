@@ -1,0 +1,132 @@
+{
+  "input": {
+    "path": "data/processed/observation_audit/iris_observed_2025_records.csv",
+    "sha256": "b0478194c45945d858165f84476ecba78755a33372aa23823a6651a18a245fba"
+  },
+  "horizon_days": 30,
+  "training_start": "2025-01-01",
+  "windows": [
+    {
+      "Month": "April",
+      "Train through": "2025-03-01",
+      "Training days": 60,
+      "Validation start": "2025-04-01",
+      "Validation end": "2025-04-30",
+      "Validation days": 30,
+      "Coverage (%)": 60.0
+    },
+    {
+      "Month": "June",
+      "Train through": "2025-05-01",
+      "Training days": 121,
+      "Validation start": "2025-06-01",
+      "Validation end": "2025-06-30",
+      "Validation days": 30,
+      "Coverage (%)": 6.666666666666667
+    },
+    {
+      "Month": "August",
+      "Train through": "2025-07-01",
+      "Training days": 182,
+      "Validation start": "2025-08-01",
+      "Validation end": "2025-08-31",
+      "Validation days": 31,
+      "Coverage (%)": 35.483870967741936
+    }
+  ],
+  "prior": {
+    "shape": 2.0,
+    "rate": 0.01
+  },
+  "seed": 20261016,
+  "draws": 50000,
+  "tree": {
+    "max_depth": 3,
+    "min_samples_leaf": 14
+  },
+  "features": [
+    "weekday",
+    "day_of_year"
+  ],
+  "tuned": false,
+  "versions": {
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "sklearn": "1.9.0"
+  },
+  "scores": [
+    {
+      "horizon_days": 30,
+      "model": "Weekday average",
+      "test_days": 30,
+      "MAE": 29.838888888888896,
+      "RMSE": 40.03474089331741,
+      "month": "April"
+    },
+    {
+      "horizon_days": 30,
+      "model": "Gamma\u2013Poisson",
+      "test_days": 30,
+      "MAE": 29.834260587140655,
+      "RMSE": 40.034397081133676,
+      "month": "April"
+    },
+    {
+      "horizon_days": 30,
+      "model": "Decision tree",
+      "test_days": 30,
+      "MAE": 31.6482788671024,
+      "RMSE": 42.70967092327068,
+      "month": "April"
+    },
+    {
+      "horizon_days": 30,
+      "model": "Weekday average",
+      "test_days": 30,
+      "MAE": 165.59694989106757,
+      "RMSE": 183.08462161530863,
+      "month": "June"
+    },
+    {
+      "horizon_days": 30,
+      "model": "Gamma\u2013Poisson",
+      "test_days": 30,
+      "MAE": 165.57992631088854,
+      "RMSE": 183.0722828517906,
+      "month": "June"
+    },
+    {
+      "horizon_days": 30,
+      "model": "Decision tree",
+      "test_days": 30,
+      "MAE": 162.67809036658144,
+      "RMSE": 179.73004216040115,
+      "month": "June"
+    },
+    {
+      "horizon_days": 30,
+      "model": "Weekday average",
+      "test_days": 31,
+      "MAE": 42.04466501240695,
+      "RMSE": 50.70085816349644,
+      "month": "August"
+    },
+    {
+      "horizon_days": 30,
+      "model": "Gamma\u2013Poisson",
+      "test_days": 31,
+      "MAE": 42.04619811238855,
+      "RMSE": 50.703002433059154,
+      "month": "August"
+    },
+    {
+      "horizon_days": 30,
+      "model": "Decision tree",
+      "test_days": 31,
+      "MAE": 134.25806451612902,
+      "RMSE": 143.3952354452096,
+      "month": "August"
+    }
+  ],
+  "limitation": "Retrospective follow-up designed after the original test was seen; unknown historical publication availability."
+}

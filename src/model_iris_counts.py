@@ -47,10 +47,14 @@ def daily_outcome(frame: pd.DataFrame, horizon: int) -> pd.DataFrame:
     return daily
 
 
-def split_days(daily: pd.DataFrame, horizon: int):
+def split_days(daily: pd.DataFrame, horizon: int, *, origin=ORIGIN, test_end=None):
     # A full label window must finish BEFORE the forecast origin, including zero-count days.
-    train = daily.loc[daily.date + pd.Timedelta(days=horizon) < ORIGIN].copy()
-    test = daily.loc[daily.date.ge(ORIGIN)].copy()
+    origin = pd.Timestamp(origin)
+    test_end = daily.date.max() if test_end is None else pd.Timestamp(test_end)
+    if test_end < origin or horizon not in (30, 90):
+        raise ValueError('Use an ordered evaluation period and a 30- or 90-day horizon.')
+    train = daily.loc[daily.date + pd.Timedelta(days=horizon) < origin].copy()
+    test = daily.loc[daily.date.between(origin, test_end)].copy()
     if train.empty or test.empty or set(train.weekday) != set(range(7)):
         raise ValueError('Need nonempty periods and all weekdays in training.')
     return train, test
@@ -65,8 +69,8 @@ def gamma_update(counts, alpha=ALPHA, beta=BETA):
     return alpha + y.sum(), beta + len(y)
 
 
-def evaluate(daily: pd.DataFrame, horizon: int):
-    train, test = split_days(daily, horizon)
+def evaluate(daily: pd.DataFrame, horizon: int, *, origin=ORIGIN, test_end=None):
+    train, test = split_days(daily, horizon, origin=origin, test_end=test_end)
     model = DecisionTreeRegressor(max_depth=3, min_samples_leaf=14, random_state=SEED)
     model.fit(train[FEATURES], train['count'])
     predictions = test[['date', 'weekday', 'count']].copy()

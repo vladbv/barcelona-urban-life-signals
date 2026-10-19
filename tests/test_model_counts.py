@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from src.model_iris_counts import AREA, ORIGIN, daily_outcome, evaluate, gamma_update, split_days
+from src.validate_iris_models import WINDOWS, validate
 
 
 def record(identifier, lag, area=AREA):
@@ -80,6 +81,31 @@ class CountModelTests(unittest.TestCase):
                                (2 + posterior.sum_counts) / (.01 + posterior.train_days))
         self.assertGreater(posterior.predictive_high - posterior.predictive_low,
                            posterior.rate_high - posterior.rate_low)
+
+    def test_validation_windows_respect_maturity_and_month_end(self):
+        daily = calendar_counts()
+        for start, end in WINDOWS:
+            train, validation = split_days(daily, 30, origin=start, test_end=end)
+            origin = pd.Timestamp(start)
+            self.assertEqual(train.date.min(), pd.Timestamp('2025-01-01'))
+            self.assertEqual(train.date.max(), origin - pd.Timedelta(days=31))
+            self.assertEqual(validation.date.min(), origin)
+            self.assertEqual(validation.date.max(), pd.Timestamp(end))
+            self.assertEqual(len(validation), origin.days_in_month)
+        with self.assertRaises(ValueError):
+            split_days(daily, 30, origin='2025-04-01', test_end='2025-03-31')
+
+    @patch('src.model_iris_counts.DRAWS', 1000)
+    def test_validation_excludes_later_quarter_completely(self):
+        daily = calendar_counts()
+        expected = validate(daily)
+        altered = daily.copy()
+        altered.loc[altered.date.ge('2025-09-01'), 'count'] += 100000
+        actual = validate(altered)
+        for left, right in zip(expected, actual):
+            pd.testing.assert_frame_equal(left, right)
+        self.assertEqual(len(actual[1]), 91)
+        self.assertFalse(actual[1].date.duplicated().any())
 
 
 if __name__ == '__main__':

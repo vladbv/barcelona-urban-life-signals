@@ -110,6 +110,18 @@ operational forecast. [See the prior–likelihood–posterior plot, predictive c
 
 <!-- END IRIS MODEL FINDINGS -->
 
+<!-- BEGIN IRIS VALIDATION -->
+
+### Does the model help in more than one month?
+
+![Earlier-month prediction errors and Bayesian interval coverage](reports/figures/iris_temporal_validation.png)
+
+The decision tree beats the weekday average in **1 of 3 months**. The Bayesian model’s nominal 95% intervals contain **7%–60%** of daily counts across these months.
+
+This **time-based cross-validation** refits on earlier records before checking April, June and August. It tests whether the findings repeat before anyone relies on them to anticipate busy days. These are retrospective checks, with no retuning. [Read the validation design and limitations](reports/iris_temporal_validation.md).
+
+<!-- END IRIS VALIDATION -->
+
 ## A finding that changed the analysis
 
 **December’s observed count rises by 34.2% when later closures are included.**
@@ -150,6 +162,7 @@ With the inspected data prepared locally:
 python -m src.explore_iris_signals --readme-path README.md
 python -m src.audit_iris_observation
 python -m src.model_iris_counts --readme-path README.md
+python -m src.validate_iris_models --readme-path README.md
 python -m unittest discover -s tests -v
 ```
 

@@ -210,3 +210,21 @@ See `reports/iris_model_comparison.md`. This narrow retrospective benchmark is
 separate from the unfinished weather-source milestone. Any further model choices
 need validation inside training data and fresh evaluation data before operational
 claims. No neural network or additional dependency was needed.
+
+## Model stability check — 2026-10-19
+
+- [x] Apply expanding-window temporal validation within January–August using
+      April, June and August validation months fixed before computing scores.
+- [x] Reuse the three existing models without tuning; require full 30-day outcome
+      maturity before each validation month and exclude September–December.
+- [x] Publish per-month errors and predictive coverage with a readable README
+      figure, methods, aggregate outputs, source fingerprint and boundary tests.
+
+The tree beats the weekday average in only one of three months. Bayesian
+interval coverage remains far below the nominal 95%. This follow-up was designed
+after seeing the original test, so it is not independent final validation.
+It fulfils the next modelling check without adding another model or dependency.
+
+Next: resume Milestone 4 with weather-source discovery and coverage inspection.
+Use the existing weekday average as a reference; investigate changing rates and
+reporting-channel composition before attributing the difficult months to weather.

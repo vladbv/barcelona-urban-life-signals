@@ -161,3 +161,20 @@ settings, input fingerprint, package versions and simulation seed are recorded.
 No dependency beyond `requirements.txt` is needed. Historical publication delays
 remain unknown. Treat October–December as an already-inspected test period in
 future development; do not tune models against these published results.
+
+## Check stability across earlier months
+
+```bash
+python -m src.validate_iris_models --readme-path README.md
+```
+
+This reuses the audited input and fixed model settings. It refits before April,
+June and August, using only earlier dates with fully matured 30-day outcomes.
+September–December data do not enter these fits or scores. The validation design
+was added after the original test was seen; it is a retrospective diagnostic,
+not a fresh final test or a hyperparameter search.
+
+Outputs: `data/processed/models/iris_validation_*.csv`,
+`reports/iris_temporal_validation.md`, `reports/iris_validation_manifest.json`
+and one figure. The optional README update uses a separate marker pair and
+preserves the existing findings. No new download or dependency is needed.
