@@ -228,3 +228,14 @@ It fulfils the next modelling check without adding another model or dependency.
 Next: resume Milestone 4 with weather-source discovery and coverage inspection.
 Use the existing weekday average as a reference; investigate changing rates and
 reporting-channel composition before attributing the difficult months to weather.
+
+## README interpretation update — 2026-10-20
+
+- [x] Link Data Mining, Machine Learning and Bayesian Learning to implemented evidence.
+- [x] Explain how to read the model chart and define predictive calibration plainly.
+- [x] Connect symmetric prediction error to the Decision Analysis concept of
+      asymmetric loss, explicitly leaving staffing costs and decisions unestimated.
+
+Editorial update only: preserve the fitted models and data. Update the narrative
+generator so rebuilding the README retains the explanation. Weather-source
+discovery remains the next analytical step.

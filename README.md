@@ -31,17 +31,17 @@ Requests still open or closed in another year are missing from this view.
 My training in **Machine Learning, Data Mining, Statistical Modelling and
 Bayesian Learning** informs how I approach the data:
 
-- **Prepare before predicting.** I preserve raw files, remove exact duplicates
-  and validate dates and identifiers. [Preparation code](src/prepare_iris_dataset.py).
-- **Check what a comparison measures.** I calculate averages per calendar day,
-  retain missing locations and investigate year-end selection.
-  [Analysis code](src/iris_signals.py) · [Observation audit](reports/iris_observation_windows.md).
-- **Test predictions on later dates.** Compare a decision tree and a Bayesian
-  count model with a weekday-average baseline. Check prediction errors,
-  uncertainty and sensitivity to assumptions. [Model code](src/model_iris_counts.py).
-- **Make the work verifiable.** Shared calculations generate plots and reports;
-  [tests](tests/) and [source fingerprints](reports/iris_model_manifest.json)
-  support reproducibility.
+- **Data Mining: understand the sample.** I check duplicates, missing locations
+  and which requests the exports leave out. [Observation audit](reports/iris_observation_windows.md).
+- **Machine Learning: test generalisation.** Does a model trained on earlier
+  dates work on later ones? I compare it with a simple weekday average across
+  several months. [Validation](reports/iris_temporal_validation.md).
+- **Bayesian Learning: check uncertainty.** I update a prior with observed counts,
+  then check whether predicted ranges match the variation in new observations.
+  [Model and diagnostics](reports/iris_model_comparison.md).
+
+Shared calculations generate the plots and reports. [Tests](tests/) and
+[source fingerprints](reports/iris_model_manifest.json) make the results inspectable.
 
 [How the four courses connect to implemented work](reports/course_to_project.md).
 
@@ -81,18 +81,25 @@ Some requests concern administrative services rather than a specific place. **Mi
 
 <!-- BEGIN IRIS MODEL FINDINGS -->
 
-## Predicting requests means testing uncertainty, too
+## A precise average can still miss a busy day
 
 This experiment uses **cleaning requests marked closed within 30 days**, combining
 the two audited exports. It is a different group from the descriptive charts above.
 
 ![Observed later counts, Bayesian predictive intervals and errors from three models](reports/figures/iris_model_holdout.png)
 
+**Read the chart:** dots are observed daily counts; the shaded band is the
+Bayesian model’s predicted range. The lower bars compare average errors.
+
 **The Bayesian model’s nominal 95% intervals cover only 39% of test days.**
-Its *prior* starts with a broad range of possible daily rates. The *Poisson likelihood*
-connects those rates to training counts. The *posterior* updates the rates; the
-*posterior predictive distribution* describes possible counts on a new day.
-The missed observations show why a precise average is not enough for planning.
+This is a **calibration** check: a well-calibrated 95% range should contain
+roughly 95% of new daily counts over repeated predictions. Here, too many days
+fall outside it for the range to be dependable.
+
+The *prior* describes possible mean daily counts. The *Poisson likelihood*
+measures how well each mean explains the training counts. The *posterior* updates
+our uncertainty about that mean; the *posterior predictive distribution* also
+includes variation from one day to another.
 
 On the same October–December test, the **decision tree** misses by an average of
 **42.3 requests/day**, versus **47.8** for a simple weekday average
@@ -121,6 +128,17 @@ The decision tree beats the weekday average in **1 of 3 months**. The Bayesian m
 This **time-based cross-validation** refits on earlier records before checking April, June and August. It tests whether the findings repeat before anyone relies on them to anticipate busy days. These are retrospective checks, with no retuning. [Read the validation design and limitations](reports/iris_temporal_validation.md).
 
 <!-- END IRIS VALIDATION -->
+
+## From prediction errors to decisions
+
+**Underestimating and overestimating requests may have different consequences.**
+In a future staffing application, too few expected requests could leave a team
+unprepared; too many could tie up capacity needed elsewhere.
+
+In Decision Analysis, an **asymmetric loss function** assigns different costs to
+these two errors. The current MAE metric treats both directions equally. Choosing
+costs would require input from service teams and a reliable measure of workload.
+**No staffing costs or optimal staffing levels are estimated here.**
 
 ## A finding that changed the analysis
 

@@ -256,18 +256,25 @@ def main():
             raise ValueError('README needs one correctly ordered model-findings marker pair.')
         scores=r['metrics'].set_index('model').MAE
         sensitivity_scores=results[90]['metrics'].set_index('model').MAE
-        body=f'''## Predicting requests means testing uncertainty, too
+        body=f'''## A precise average can still miss a busy day
 
 This experiment uses **cleaning requests marked closed within 30 days**, combining
 the two audited exports. It is a different group from the descriptive charts above.
 
 ![Observed later counts, Bayesian predictive intervals and errors from three models](reports/figures/iris_model_holdout.png)
 
+**Read the chart:** dots are observed daily counts; the shaded band is the
+Bayesian model’s predicted range. The lower bars compare average errors.
+
 **The Bayesian model’s nominal 95% intervals cover only {r['coverage']:.0%} of test days.**
-Its *prior* starts with a broad range of possible daily rates. The *Poisson likelihood*
-connects those rates to training counts. The *posterior* updates the rates; the
-*posterior predictive distribution* describes possible counts on a new day.
-The missed observations show why a precise average is not enough for planning.
+This is a **calibration** check: a well-calibrated 95% range should contain
+roughly 95% of new daily counts over repeated predictions. Here, too many days
+fall outside it for the range to be dependable.
+
+The *prior* describes possible mean daily counts. The *Poisson likelihood*
+measures how well each mean explains the training counts. The *posterior* updates
+our uncertainty about that mean; the *posterior predictive distribution* also
+includes variation from one day to another.
 
 On the same October–December test, the **decision tree** misses by an average of
 **{scores['Decision tree']:.1f} requests/day**, versus **{scores['Weekday average']:.1f}** for a simple weekday average
