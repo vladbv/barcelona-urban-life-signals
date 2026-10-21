@@ -36,6 +36,9 @@ Bayesian Learning** informs how I approach the data:
 - **Machine Learning: test generalisation.** Does a model trained on earlier
   dates work on later ones? I compare it with a simple weekday average across
   several months. [Validation](reports/iris_temporal_validation.md).
+- **Statistical Modelling: test assumptions.** I compare observed daily variation
+  with counts simulated from the fitted model. The constant weekday rates miss
+  much of that variation. [Predictive checks](reports/iris_model_comparison.md#data-mining-and-posterior-predictive-checks).
 - **Bayesian Learning: check uncertainty.** I update a prior with observed counts,
   then check whether predicted ranges match the variation in new observations.
   [Model and diagnostics](reports/iris_model_comparison.md).
@@ -100,6 +103,26 @@ The *prior* describes possible mean daily counts. The *Poisson likelihood*
 measures how well each mean explains the training counts. The *posterior* updates
 our uncertainty about that mean; the *posterior predictive distribution* also
 includes variation from one day to another.
+
+<details>
+<summary>Worked Bayesian example: estimating an average versus predicting a day</summary>
+
+For Mondays, the illustrative **Gamma prior** has mean 200 requests.
+The **Poisson likelihood** uses 7,991 qualifying requests across
+34 training Mondays. **Conjugate updating** gives a Gamma posterior
+with mean **235.0 requests per Monday**.
+
+| Question | Model-based 95% interval | What it includes |
+| --- | --- | --- |
+| What is the underlying mean per Monday? | 229.9–240.1 requests | Posterior uncertainty about the mean: a **credible interval**. |
+| How many requests might a new Monday have? | 205–266 requests | Uncertainty about the mean plus daily variation: a **posterior predictive interval**. |
+
+The second range is wider because individual days vary around the mean.
+Both rely on the model’s assumptions; the poor coverage above shows why they
+cannot yet be trusted for planning. **Estimating an average precisely does not
+make a busy day predictable.**
+
+</details>
 
 On the same October–December test, the **decision tree** misses by an average of
 **42.3 requests/day**, versus **47.8** for a simple weekday average

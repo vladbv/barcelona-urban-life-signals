@@ -276,6 +276,26 @@ measures how well each mean explains the training counts. The *posterior* update
 our uncertainty about that mean; the *posterior predictive distribution* also
 includes variation from one day to another.
 
+<details>
+<summary>Worked Bayesian example: estimating an average versus predicting a day</summary>
+
+For Mondays, the illustrative **Gamma prior** has mean 200 requests.
+The **Poisson likelihood** uses {int(monday.sum_counts):,} qualifying requests across
+{int(monday.train_days)} training Mondays. **Conjugate updating** gives a Gamma posterior
+with mean **{monday.posterior_mean:.1f} requests per Monday**.
+
+| Question | Model-based 95% interval | What it includes |
+| --- | --- | --- |
+| What is the underlying mean per Monday? | {monday.rate_low:.1f}–{monday.rate_high:.1f} requests | Posterior uncertainty about the mean: a **credible interval**. |
+| How many requests might a new Monday have? | {int(monday.predictive_low)}–{int(monday.predictive_high)} requests | Uncertainty about the mean plus daily variation: a **posterior predictive interval**. |
+
+The second range is wider because individual days vary around the mean.
+Both rely on the model’s assumptions; the poor coverage above shows why they
+cannot yet be trusted for planning. **Estimating an average precisely does not
+make a busy day predictable.**
+
+</details>
+
 On the same October–December test, the **decision tree** misses by an average of
 **{scores['Decision tree']:.1f} requests/day**, versus **{scores['Weekday average']:.1f}** for a simple weekday average
 and **{scores['Gamma–Poisson']:.1f}** for the Bayesian mean. Lower is better.

@@ -239,3 +239,13 @@ reporting-channel composition before attributing the difficult months to weather
 Editorial update only: preserve the fitted models and data. Update the narrative
 generator so rebuilding the README retains the explanation. Weather-source
 discovery remains the next analytical step.
+
+## Worked Bayesian interpretation — 2026-10-22
+
+- [x] Surface the implemented Statistical Modelling checks in the course overview.
+- [x] Add an expandable README example distinguishing a credible interval for
+      the Monday mean from a predictive interval for a new Monday’s count.
+- [x] Generate the example from fitted summaries, retaining the observed coverage
+      failure and keeping optional technical detail out of the main reading flow.
+
+Presentation only; no model or data change. Weather-source discovery remains next.
