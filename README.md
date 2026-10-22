@@ -150,6 +150,8 @@ The decision tree beats the weekday average in **1 of 3 months**. The Bayesian m
 
 This **time-based cross-validation** refits on earlier records before checking April, June and August. It tests whether the findings repeat before anyone relies on them to anticipate busy days. These are retrospective checks, with no retuning. [Read the validation design and limitations](reports/iris_temporal_validation.md).
 
+**Error direction matters.** The weekday average predicts too few requests on **30 of 30 June days**. The tree predicts too many on **31 of 31 August days**. Average error size alone does not reveal this difference. [See the residual analysis and plot](reports/iris_temporal_validation.md#which-way-do-the-models-miss).
+
 <!-- END IRIS VALIDATION -->
 
 ## From prediction errors to decisions

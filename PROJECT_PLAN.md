@@ -249,3 +249,17 @@ discovery remains the next analytical step.
       failure and keeping optional technical detail out of the main reading flow.
 
 Presentation only; no model or data change. Weather-source discovery remains next.
+
+## Error-direction diagnostics — 2026-10-22
+
+- [x] Apply residual analysis to existing validation predictions: signed errors,
+      MAE and underpredicted/overpredicted/exact days for every model and month.
+- [x] Publish a comparison plot and explain why opposite daily errors can cancel
+      in a monthly average. Link the detailed evidence from a short README finding.
+- [x] Export aggregate diagnostics, record them in the manifest and test error
+      signs, exact matches, cancellation, denominators and invalid inputs.
+
+The weekday average underpredicts on all 30 June days; the tree overpredicts on
+all 31 August days. These descriptive findings establish neither a cause nor
+staffing costs. Reuse existing models, data and dependencies. Weather-source
+discovery remains the next data milestone.

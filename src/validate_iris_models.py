@@ -69,6 +69,48 @@ def plot(scores, windows, destination):
     plt.close(fig)
 
 
+def summarise_errors(predictions):
+    """Summarise observed minus predicted counts, without rounding before comparison."""
+    values = predictions[['count', *MODELS]].to_numpy(dtype=float)
+    if (predictions.empty or predictions[['date', 'month']].isna().any().any()
+            or predictions.date.duplicated().any() or not np.isfinite(values).all()
+            or (values < 0).any()):
+        raise ValueError('Expected unique dated predictions with finite nonnegative counts.')
+    rows = []
+    for month, group in predictions.groupby('month', sort=False):
+        for model in MODELS:
+            error = group['count'] - group[model]
+            rows.append({'Month': month, 'Model': model, 'Days': len(group),
+                         'Underpredicted days': int(error.gt(0).sum()),
+                         'Overpredicted days': int(error.lt(0).sum()),
+                         'Exact days': int(error.eq(0).sum()),
+                         'Mean error': float(error.mean()),
+                         'MAE': float(error.abs().mean())})
+    return pd.DataFrame(rows)
+
+
+def plot_errors(diagnostics, destination):
+    months = diagnostics.Month.drop_duplicates().tolist()
+    x = np.arange(len(months))
+    fig, ax = plt.subplots(figsize=(9, 5))
+    limit = max(1, diagnostics['Mean error'].abs().max()) * 1.35
+    for i, (model, color) in enumerate(zip(MODELS, ['#A3AEB2', '#174C5E', '#B47A21'])):
+        values = diagnostics.loc[diagnostics.Model.eq(model)].set_index('Month').loc[months, 'Mean error']
+        bars = ax.bar(x + (i - 1) * .24, values, width=.24, color=color, label=model)
+        ax.bar_label(bars, fmt='%+.1f', padding=4, fontsize=9)
+    ax.axhline(0, color='#2F241D', linewidth=1)
+    ax.set_xticks(x, months)
+    ax.set_ylim(-limit, limit)
+    ax.legend(frameon=False, ncol=3, fontsize=9, loc='lower left')
+    style_axis(ax, 'Too few or too many requests predicted?',
+               xlabel='Validation month in 2025', ylabel='Mean error: observed − predicted requests/day')
+    fig.text(.02, .015, 'Above zero: predicts too few. Below zero: predicts too many.\nA near-zero average can hide large daily errors; compare with MAE. IRIS · 30-day closure outcome.', fontsize=9)
+    fig.tight_layout(rect=(0, .10, 1, 1))
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(destination, dpi=160)
+    plt.close(fig)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input', type=Path, default=INPUT)
@@ -81,11 +123,22 @@ def main():
             raise ValueError('README needs one ordered validation marker pair.')
     frame = pd.read_csv(args.input, parse_dates=['registration_date', 'closure_date'], low_memory=False)
     scores, predictions, windows = validate(daily_outcome(frame, 30))
+    diagnostics = summarise_errors(predictions)
     out = Path('data/processed/models')
     out.mkdir(parents=True, exist_ok=True)
     for name, table in [('scores', scores), ('predictions', predictions), ('windows', windows)]:
         table.to_csv(out / f'iris_validation_{name}.csv', index=False)
+    diagnostics.to_csv(out / 'iris_validation_error_direction.csv', index=False)
     plot(scores, windows, Path('reports/figures/iris_temporal_validation.png'))
+    plot_errors(diagnostics, Path('reports/figures/iris_error_direction.png'))
+    by_group = diagnostics.set_index(['Month', 'Model'])
+    june = by_group.loc[('June', 'Weekday average')]
+    august = by_group.loc[('August', 'Decision tree')]
+    april = by_group.loc[('April', 'Weekday average')]
+    direction_finding = (
+        f'The weekday average predicts too few requests on **{int(june["Underpredicted days"])} '
+        f'of {int(june["Days"])} June days**. The tree predicts too many on '
+        f'**{int(august["Overpredicted days"])} of {int(august["Days"])} August days**.')
     errors = scores.pivot(index='month', columns='model', values='MAE')
     wins = int((errors['Decision tree'] < errors['Weekday average']).sum())
     coverage = windows['Coverage (%)']
@@ -122,6 +175,22 @@ def main():
         'selection or retuning follows these results. The three windows were fixed before calculating these '
         'scores, but this follow-up was designed after the original October–December results were seen. '
         'It is not a new untouched test. September–December observations are excluded from these fits and scores.',
+        '## Which way do the models miss?',
+        '![Mean signed errors: positive means too few predicted requests; negative means too many](figures/iris_error_direction.png)',
+        direction_finding,
+        'This **residual analysis** uses observed minus predicted counts on validation days. '
+        'Positive errors mean the model predicts too few requests; negative errors mean too many. '
+        'The bars average those signed errors within each month. No model is refitted or selected using these diagnostics.',
+        f'For the weekday average in April, the mean signed error is only **{april["Mean error"]:+.1f}** '
+        f'requests per day, while MAE is **{april["MAE"]:.1f}**. Overpredictions and underpredictions '
+        'nearly cancel in the signed average. A small mean error does not imply accurate daily predictions.',
+        markdown_table(diagnostics.round(2)),
+        'Underpredicted, overpredicted and exact days partition each validation month. '
+        'Directions use unrounded forecasts; the table rounds summaries for reading. '
+        'These are descriptive errors on the selected request counts, not statistical significance tests. '
+        'Persistent underprediction could leave a team unprepared, while overprediction could reserve '
+        'capacity unnecessarily. Actual staffing consequences require workload and cost data that this project does not have. '
+        'The error directions alone do not identify weather effects, overfitting or the cause of the changes.',
         '## What the data can support',
         'The outcome remains observed cleaning/collection requests registered in 2025 and marked closed '
         'within 30 days in the two preserved exports. It is neither total demand nor proof of successful repairs. '
@@ -145,6 +214,8 @@ def main():
                 'features': ['weekday', 'day_of_year'], 'tuned': False,
                 'versions': {'numpy': np.__version__, 'pandas': pd.__version__, 'sklearn': sklearn.__version__},
                 'scores': scores.to_dict('records'),
+                'error_direction': diagnostics.to_dict('records'),
+                'error_convention': 'Observed minus predicted; positive means underprediction. Exact comparisons before rounding.',
                 'limitation': 'Retrospective follow-up designed after the original test was seen; unknown historical publication availability.'}
     Path('reports/iris_validation_manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     if original is not None:
@@ -154,7 +225,10 @@ def main():
                 'This **time-based cross-validation** refits on earlier records before checking April, June and August. '
                 'It tests whether the findings repeat before anyone relies on them to anticipate busy days. '
                 'These are retrospective checks, with no retuning. '
-                '[Read the validation design and limitations](reports/iris_temporal_validation.md).')
+                '[Read the validation design and limitations](reports/iris_temporal_validation.md).\n\n'
+                '**Error direction matters.** ' + direction_finding + ' '
+                'Average error size alone does not reveal this difference. '
+                '[See the residual analysis and plot](reports/iris_temporal_validation.md#which-way-do-the-models-miss).')
         args.readme_path.write_text(original[:original.index(START) + len(START)] + '\n\n' + body
                                    + '\n\n' + original[original.index(END):])
     print(scores.round(2).to_string(index=False))

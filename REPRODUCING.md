@@ -178,3 +178,9 @@ Outputs: `data/processed/models/iris_validation_*.csv`,
 `reports/iris_temporal_validation.md`, `reports/iris_validation_manifest.json`
 and one figure. The optional README update uses a separate marker pair and
 preserves the existing findings. No new download or dependency is needed.
+
+The same command also exports `iris_validation_error_direction.csv` and
+`reports/figures/iris_error_direction.png`. Signed errors are observed minus
+predicted counts, calculated before rounding. The report and manifest include
+mean signed error, MAE and counts of underpredicted, overpredicted and exact days.
+This diagnostic uses the existing validation predictions without retuning models.

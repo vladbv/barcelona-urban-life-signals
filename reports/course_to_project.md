@@ -11,7 +11,7 @@ suggesting an operational use.
 | --- | --- | --- |
 | Machine Learning | A shallow decision tree using weekday and day of year; comparison with a weekday-average baseline on later dates, plus expanding-window checks in three earlier months. | Model fitting, explicit features, time-based cross-validation, MAE and RMSE. No tuning on the test quarter. |
 | Data Mining | Duplicate and identifier checks, weekday patterns, topic summaries, missing geography and a closure-window audit. | Pattern discovery with attention to sample selection. No clustering or anomaly detector is claimed. |
-| Statistical Modelling | A Poisson likelihood for daily observed counts, separate rates by weekday and variance-to-mean diagnostics. | Distributional assumptions must be checked against the variation in real data. |
+| Statistical Modelling | A Poisson likelihood, separate weekday rates, variance-to-mean diagnostics and signed validation errors. | Check both distributional assumptions and whether errors consistently point in one direction. |
 | Bayesian Learning | Gamma–Poisson conjugate updating, posterior credible intervals, predictive simulation, prior sensitivity and posterior predictive checks. | Parameter uncertainty differs from uncertainty about a new day’s count. Simulation error is recorded separately. |
 
 [Model implementation](../src/model_iris_counts.py) ·
@@ -45,6 +45,13 @@ The [earlier-month validation](iris_temporal_validation.md) checks whether that
 advantage repeats: the tree beats the weekday average in only one of April,
 June and August. This is why model assessment needs more than a single split.
 The follow-up is retrospective and leaves the original test quarter separate.
+
+[Residual analysis](iris_temporal_validation.md#which-way-do-the-models-miss)
+adds the direction of those misses. For the weekday average in April, a net
+error of about +1 request/day hides a mean absolute error of 29.8: opposite
+errors nearly cancel. In June that baseline predicts too few requests every day;
+in August the tree predicts too many every day. This supports discussing unequal
+consequences of errors without inventing staffing costs or claiming a cause.
 
 ## What these methods do not establish
 

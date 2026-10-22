@@ -36,6 +36,30 @@ Refit the same three models separately before April, June and August. Each train
 
 The model settings and features are unchanged from the original benchmark. No search, ranking-based selection or retuning follows these results. The three windows were fixed before calculating these scores, but this follow-up was designed after the original October–December results were seen. It is not a new untouched test. September–December observations are excluded from these fits and scores.
 
+## Which way do the models miss?
+
+![Mean signed errors: positive means too few predicted requests; negative means too many](figures/iris_error_direction.png)
+
+The weekday average predicts too few requests on **30 of 30 June days**. The tree predicts too many on **31 of 31 August days**.
+
+This **residual analysis** uses observed minus predicted counts on validation days. Positive errors mean the model predicts too few requests; negative errors mean too many. The bars average those signed errors within each month. No model is refitted or selected using these diagnostics.
+
+For the weekday average in April, the mean signed error is only **+1.0** requests per day, while MAE is **29.8**. Overpredictions and underpredictions nearly cancel in the signed average. A small mean error does not imply accurate daily predictions.
+
+| Month  | Model           | Days | Underpredicted days | Overpredicted days | Exact days | Mean error | MAE    |
+| ------ | --------------- | ---- | ------------------- | ------------------ | ---------- | ---------- | ------ |
+| April  | Weekday average | 30   | 16                  | 14                 | 0          | 0.98       | 29.84  |
+| April  | Gamma–Poisson   | 30   | 16                  | 14                 | 0          | 0.95       | 29.83  |
+| April  | Decision tree   | 30   | 16                  | 14                 | 0          | 1.27       | 31.65  |
+| June   | Weekday average | 30   | 30                  | 0                  | 0          | 165.6      | 165.6  |
+| June   | Gamma–Poisson   | 30   | 30                  | 0                  | 0          | 165.58     | 165.58 |
+| June   | Decision tree   | 30   | 30                  | 0                  | 0          | 162.68     | 162.68 |
+| August | Weekday average | 31   | 27                  | 4                  | 0          | 35.6       | 42.04  |
+| August | Gamma–Poisson   | 31   | 27                  | 4                  | 0          | 35.6       | 42.05  |
+| August | Decision tree   | 31   | 0                   | 31                 | 0          | -134.26    | 134.26 |
+
+Underpredicted, overpredicted and exact days partition each validation month. Directions use unrounded forecasts; the table rounds summaries for reading. These are descriptive errors on the selected request counts, not statistical significance tests. Persistent underprediction could leave a team unprepared, while overprediction could reserve capacity unnecessarily. Actual staffing consequences require workload and cost data that this project does not have. The error directions alone do not identify weather effects, overfitting or the cause of the changes.
+
 ## What the data can support
 
 The outcome remains observed cleaning/collection requests registered in 2025 and marked closed within 30 days in the two preserved exports. It is neither total demand nor proof of successful repairs. Historical publication delays and revisions are unknown; date-based label maturity cannot recreate exactly what data would have been available then. No weather effect or cause of model errors is identified.

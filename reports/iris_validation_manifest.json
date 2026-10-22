@@ -128,5 +128,98 @@
       "month": "August"
     }
   ],
+  "error_direction": [
+    {
+      "Month": "April",
+      "Model": "Weekday average",
+      "Days": 30,
+      "Underpredicted days": 16,
+      "Overpredicted days": 14,
+      "Exact days": 0,
+      "Mean error": 0.9777777777777762,
+      "MAE": 29.838888888888896
+    },
+    {
+      "Month": "April",
+      "Model": "Gamma\u2013Poisson",
+      "Days": 30,
+      "Underpredicted days": 16,
+      "Overpredicted days": 14,
+      "Exact days": 0,
+      "Mean error": 0.9461968783933088,
+      "MAE": 29.834260587140655
+    },
+    {
+      "Month": "April",
+      "Model": "Decision tree",
+      "Days": 30,
+      "Underpredicted days": 16,
+      "Overpredicted days": 14,
+      "Exact days": 0,
+      "Mean error": 1.272374727668847,
+      "MAE": 31.6482788671024
+    },
+    {
+      "Month": "June",
+      "Model": "Weekday average",
+      "Days": 30,
+      "Underpredicted days": 30,
+      "Overpredicted days": 0,
+      "Exact days": 0,
+      "Mean error": 165.59694989106757,
+      "MAE": 165.59694989106757
+    },
+    {
+      "Month": "June",
+      "Model": "Gamma\u2013Poisson",
+      "Days": 30,
+      "Underpredicted days": 30,
+      "Overpredicted days": 0,
+      "Exact days": 0,
+      "Mean error": 165.57992631088854,
+      "MAE": 165.57992631088854
+    },
+    {
+      "Month": "June",
+      "Model": "Decision tree",
+      "Days": 30,
+      "Underpredicted days": 30,
+      "Overpredicted days": 0,
+      "Exact days": 0,
+      "Mean error": 162.67809036658144,
+      "MAE": 162.67809036658144
+    },
+    {
+      "Month": "August",
+      "Model": "Weekday average",
+      "Days": 31,
+      "Underpredicted days": 27,
+      "Overpredicted days": 4,
+      "Exact days": 0,
+      "Mean error": 35.6029776674938,
+      "MAE": 42.04466501240695
+    },
+    {
+      "Month": "August",
+      "Model": "Gamma\u2013Poisson",
+      "Days": 31,
+      "Underpredicted days": 27,
+      "Overpredicted days": 4,
+      "Exact days": 0,
+      "Mean error": 35.60495342982229,
+      "MAE": 42.04619811238855
+    },
+    {
+      "Month": "August",
+      "Model": "Decision tree",
+      "Days": 31,
+      "Underpredicted days": 0,
+      "Overpredicted days": 31,
+      "Exact days": 0,
+      "Mean error": -134.25806451612902,
+      "MAE": 134.25806451612902
+    }
+  ],
+  "error_convention": "Observed minus predicted; positive means underprediction. Exact comparisons before rounding.",
   "limitation": "Retrospective follow-up designed after the original test was seen; unknown historical publication availability."
 }

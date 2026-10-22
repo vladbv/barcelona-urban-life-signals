@@ -34,3 +34,4 @@ reports/figures/*
 !reports/figures/iris_bayesian_update.png
 !reports/figures/iris_model_holdout.png
 !reports/figures/iris_temporal_validation.png
+!reports/figures/iris_error_direction.png
