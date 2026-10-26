@@ -120,7 +120,8 @@ Request-type translations remain unverified: the catalog defines the field
 but provides no mapping of its values. Two new area labels and many new detail
 labels also mean that category comparisons need care.
 
-Next, select and inspect a Barcelona weather source for a narrow question:
+The official 2025 weather source is now inspected (see the command below).
+Next, verify day boundaries and quality provenance for the narrow question:
 are daily weather conditions associated with the number of observed cleaning
 requests that close within 30 days? Check a 90-day definition and weekday/month
 differences. The cleaning area's published name is shared by both exports;
@@ -184,3 +185,26 @@ The same command also exports `iris_validation_error_direction.csv` and
 predicted counts, calculated before rounding. The report and manifest include
 mean signed error, MAE and counts of underpredicted, overpredicted and exact days.
 This diagnostic uses the existing validation predictions without retuning models.
+
+## Inspect the weather source and joins
+
+```bash
+python -m src.audit_weather --download --snapshot 2026-10-26 --readme-path README.md
+```
+
+This preserves missing official catalogs and CSVs in `data/raw/` and refuses to
+overwrite them. The catalog resource names select the 2025 observations,
+variable definitions and 2020 station metadata. These are live resources, not
+server-versioned historical files: use the actual retrieval date as `--snapshot`
+for a new download and inspect its resulting coverage before further analysis.
+Omit `--download` when rebuilding preserved files offline.
+
+The command generates two CSVs under `data/processed/weather/`, a coverage plot,
+`reports/weather_source_audit.md` and `reports/weather_manifest.json`. The README
+update has its own marker pair. It checks unique observation keys, station
+identity consistency and many-to-one metadata joins. Missing weather stays
+missing; no station value is assigned to an IRIS neighbourhood.
+
+No new dependency is needed. Before a weather/IRIS join, verify the weather
+daily aggregation boundaries and measurement quality; record presence alone
+does not establish either. See the source report for provisional station choice.

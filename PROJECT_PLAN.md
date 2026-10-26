@@ -108,13 +108,14 @@ The original 2025 explorer and 13-plot tour remain a separate comparison.
 
 ## Milestone 4 — Add weather context
 
-Status: narrow question defined; source discovery and modelling not started.
+Status: official 2025 daily weather source inspected; day alignment and quality
+provenance remain to be verified before joining to IRIS. No weather model fitted.
 
 - [x] Define the first question: daily weather and observed cleaning/collection
       requests registered in 2025 and closed within 30 days, with 90-day sensitivity.
       Exclude unverified request-type mappings and distinguish this selected count
       from complete demand.
-- [ ] Select and inspect a reliable Barcelona weather source and station coverage.
+- [x] Select and inspect a reliable Barcelona weather source and station coverage.
 - [ ] Align dates, missingness, and spatial/time resolution without imputing IRIS geography.
 - [ ] Compare transparent summaries and calendar-aware regression baselines.
 - [ ] Distinguish association from causation and examine reporting-channel composition.
@@ -263,3 +264,22 @@ The weekday average underpredicts on all 30 June days; the tree overpredicts on
 all 31 August days. These descriptive findings establish neither a cause nor
 staffing costs. Reuse existing models, data and dependencies. Weather-source
 discovery remains the next data milestone.
+
+## Weather source and join audit — 2026-10-26
+
+- [x] Discover the live Open Data BCN weather resources and preserve three
+      catalogs, daily observations, variable definitions and station metadata.
+- [x] Inspect the actual five-column daily schema, units, unique observation
+      keys and station identities before creating derived calendar tables.
+- [x] Audit 2025 temperature/rain coverage: X4 and X8 complete, D5 missing one
+      temperature date, X2 listed in 2020 metadata but absent from this export.
+- [x] Enforce many-to-one metadata joins; a naive station join would expand
+      16,396 observations to 245,940 rows. Keep missing weather distinct from zero.
+- [x] Publish a readable README coverage plot, source report, fingerprints and
+      tests for duplicate keys, conflicting identities, units and missing values.
+
+Provisional primary station: El Raval (X4), with Zona Universitària (X8) for
+sensitivity. Station metadata is dated 2020 and no measurement quality flag is
+present in the export. Next: verify daily aggregation/time-zone conventions and
+quality provenance, then align with the IRIS calendar using validated keys.
+No IRIS-weather join, correlation or model has been introduced.

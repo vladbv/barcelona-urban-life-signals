@@ -176,6 +176,20 @@ date rather than fewer concerns. The later snapshot contains closures through
 **31 March 2026**; it still does not reveal every open request.
 [See the comparison plot and the 30-day/90-day follow-up rules](reports/iris_observation_windows.md).
 
+<!-- BEGIN WEATHER AUDIT -->
+
+## Before explaining the weather, check the data
+
+Rain and heat may help contextualise public-space requests. First, I checked the official weather export’s coverage and how its tables fit together.
+
+![Days with rain and temperature records at Barcelona weather stations](reports/figures/weather_coverage.png)
+
+**Data Mining in practice: join cardinality.** Joining repeated station metadata directly would inflate **16,396 observations to 245,940 rows**. The audit enforces one station identity per join and preserves missing days.
+
+Three stations supply 2025 records; the older list also names Zoo, which has none in this export. **Missing records are not zero rainfall.** Daily time boundaries and measurement quality still need verification before linking weather to IRIS. [Read the source audit and station choice](reports/weather_source_audit.md).
+
+<!-- END WEATHER AUDIT -->
+
 ## Explore further
 
 - **[All 13 IRIS plots](reports/iris_signal_summary.md):** request topics, districts,
@@ -209,6 +223,6 @@ python -m src.validate_iris_models --readme-path README.md
 python -m unittest discover -s tests -v
 ```
 
-Current scope: descriptive analysis, data-quality checks and retrospective model
-evaluation. The models are not validated for operational use. Weather comparisons
-remain a separate next step. [Project plan](PROJECT_PLAN.md).
+Current scope: descriptive analysis, model checks and weather-source inspection.
+Next: verify weather day boundaries and quality before joining to IRIS. The models
+are not validated for operational use. [Project plan](PROJECT_PLAN.md).

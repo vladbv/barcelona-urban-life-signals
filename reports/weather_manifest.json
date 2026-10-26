@@ -1,0 +1,180 @@
+{
+  "snapshot": "2026-10-26",
+  "sources": {
+    "measurements": {
+      "catalog_url": "https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_show?id=mesures-estacions-meteorologiques",
+      "resource_id": "00904de2-8660-4c41-92e3-66e7c87265be",
+      "download_url": "https://opendata-ajuntament.barcelona.cat/data/dataset/cf1de5ca-9d1c-424c-9543-8ab23e7f478e/resource/00904de2-8660-4c41-92e3-66e7c87265be/download",
+      "license": "Creative Commons Attribution 4.0",
+      "columns": [
+        "DATA_LECTURA",
+        "DATA_EXTREM",
+        "CODI_ESTACIO",
+        "ACRÒNIM",
+        "VALOR"
+      ],
+      "rows": 16396,
+      "files": [
+        {
+          "path": "data/raw/weather_measurements_catalog_2026-10-26.json",
+          "sha256": "a806fbe51b23a37778c307b4bdb80bfab9e5de339b6e2e5c1548b6e42a0d11e6"
+        },
+        {
+          "path": "data/raw/weather_measurements_2026-10-26.csv",
+          "sha256": "742baf3877c8f378ebfd08f9be7c019ae88ef8b76aac017ed995f80b684be711"
+        }
+      ]
+    },
+    "variables": {
+      "catalog_url": "https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_show?id=metadades-variables-est-meteo",
+      "resource_id": "9dac243f-7cbf-4600-9ad6-5546e757391a",
+      "download_url": "https://opendata-ajuntament.barcelona.cat/data/dataset/ceb90aa4-d34c-4d0e-8b3b-d0c0b7f2c508/resource/9dac243f-7cbf-4600-9ad6-5546e757391a/download",
+      "license": "Creative Commons Attribution 4.0",
+      "columns": [
+        "CODI_VARIABLE",
+        "NOM_VARIABLE",
+        "UNITAT",
+        "ACRÒNIM"
+      ],
+      "rows": 15,
+      "files": [
+        {
+          "path": "data/raw/weather_variables_catalog_2026-10-26.json",
+          "sha256": "753780ca11c17f2a20013dae3abdd88f152081fc673f1efe97c7549eca1979f1"
+        },
+        {
+          "path": "data/raw/weather_variables_2026-10-26.csv",
+          "sha256": "71c21f698ab5a7e0fe89c46a6d82f235c3731b348c9fa543eae95dfcf999767d"
+        }
+      ]
+    },
+    "stations": {
+      "catalog_url": "https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_show?id=metadades-estacions-meteorologiques",
+      "resource_id": "feafec8a-b389-42b5-a85d-cf16f3976440",
+      "download_url": "https://opendata-ajuntament.barcelona.cat/data/dataset/82dc847a-661d-4701-a582-b0c1aba89b2a/resource/feafec8a-b389-42b5-a85d-cf16f3976440/download",
+      "license": "Creative Commons Attribution 4.0",
+      "columns": [
+        "CODI_ESTACIO",
+        "NOM_ESTACIO",
+        "EMPLACAMENT",
+        "CODI_BARRI",
+        "NOM_BARRI",
+        "CODI_DISTRICTE",
+        "NOM_DISTRICTE",
+        "CODI_MUNICIPI",
+        "NOM_MUNICIPI",
+        "CODI_COMARCA",
+        "NOM_COMARCA",
+        "CODI_PROVINCIA",
+        "NOM_PROVINCIA",
+        "ALTITUD",
+        "LATITUD",
+        "LONGITUD",
+        "CODI_XARXA",
+        "NOM_XARXA",
+        "CODI_ESTAT",
+        "DATA_ALTA",
+        "DATA_BAIXA",
+        "ACRÒNIM"
+      ],
+      "rows": 51,
+      "files": [
+        {
+          "path": "data/raw/weather_stations_catalog_2026-10-26.json",
+          "sha256": "4a9921803ca74f25fd756e125c049bb730e28324a9e28897f17dc41e0fb6ec99"
+        },
+        {
+          "path": "data/raw/weather_stations_2026-10-26.csv",
+          "sha256": "24a6fc78020164fed2f2a53f4dbd6743253871dab01d0deabc45412d793b382d"
+        }
+      ]
+    }
+  },
+  "coverage": [
+    {
+      "Station": "D5",
+      "Variable": "Mean temperature",
+      "Unit": "°C",
+      "Recorded days": 364,
+      "Numeric days": 364,
+      "Absent dates": 1,
+      "Null values": 0
+    },
+    {
+      "Station": "D5",
+      "Variable": "Accumulated rainfall",
+      "Unit": "mm",
+      "Recorded days": 365,
+      "Numeric days": 365,
+      "Absent dates": 0,
+      "Null values": 0
+    },
+    {
+      "Station": "X2",
+      "Variable": "Mean temperature",
+      "Unit": "°C",
+      "Recorded days": 0,
+      "Numeric days": 0,
+      "Absent dates": 365,
+      "Null values": 0
+    },
+    {
+      "Station": "X2",
+      "Variable": "Accumulated rainfall",
+      "Unit": "mm",
+      "Recorded days": 0,
+      "Numeric days": 0,
+      "Absent dates": 365,
+      "Null values": 0
+    },
+    {
+      "Station": "X4",
+      "Variable": "Mean temperature",
+      "Unit": "°C",
+      "Recorded days": 365,
+      "Numeric days": 365,
+      "Absent dates": 0,
+      "Null values": 0
+    },
+    {
+      "Station": "X4",
+      "Variable": "Accumulated rainfall",
+      "Unit": "mm",
+      "Recorded days": 365,
+      "Numeric days": 365,
+      "Absent dates": 0,
+      "Null values": 0
+    },
+    {
+      "Station": "X8",
+      "Variable": "Mean temperature",
+      "Unit": "°C",
+      "Recorded days": 365,
+      "Numeric days": 365,
+      "Absent dates": 0,
+      "Null values": 0
+    },
+    {
+      "Station": "X8",
+      "Variable": "Accumulated rainfall",
+      "Unit": "mm",
+      "Recorded days": 365,
+      "Numeric days": 365,
+      "Absent dates": 0,
+      "Null values": 0
+    }
+  ],
+  "join_key": [
+    "DATA_LECTURA",
+    "CODI_ESTACIO",
+    "ACRÒNIM"
+  ],
+  "naive_station_join_rows": 245940,
+  "safe_join_rows": 16396,
+  "limits": [
+    "Station metadata is dated 2020.",
+    "Daily boundaries/time zone not verified.",
+    "No measurement quality flag in this export.",
+    "No IRIS-weather join or association fitted."
+  ]
+}

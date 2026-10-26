@@ -10,13 +10,19 @@ suggesting an operational use.
 | Training | Implemented work | What it demonstrates |
 | --- | --- | --- |
 | Machine Learning | A shallow decision tree using weekday and day of year; comparison with a weekday-average baseline on later dates, plus expanding-window checks in three earlier months. | Model fitting, explicit features, time-based cross-validation, MAE and RMSE. No tuning on the test quarter. |
-| Data Mining | Duplicate and identifier checks, weekday patterns, topic summaries, missing geography and a closure-window audit. | Pattern discovery with attention to sample selection. No clustering or anomaly detector is claimed. |
+| Data Mining | Duplicate checks, topic patterns, missing geography, observation-window audits and weather metadata joins. | Pattern discovery, sample selection and join cardinality: repeated sensor metadata must not multiply observations. |
 | Statistical Modelling | A Poisson likelihood, separate weekday rates, variance-to-mean diagnostics and signed validation errors. | Check both distributional assumptions and whether errors consistently point in one direction. |
 | Bayesian Learning | Gamma–Poisson conjugate updating, posterior credible intervals, predictive simulation, prior sensitivity and posterior predictive checks. | Parameter uncertainty differs from uncertainty about a new day’s count. Simulation error is recorded separately. |
 
 [Model implementation](../src/model_iris_counts.py) ·
 [Results, plots and methods](iris_model_comparison.md) ·
 [Observation audit](iris_observation_windows.md) · [Tests](../tests/).
+
+The [weather-source audit](weather_source_audit.md) extends this work to data
+integration. A naive station join would turn 16,396 weather observations into
+245,940 rows. Validated many-to-one joins preserve the observation count. The
+coverage chart also separates missing records from measured zero rainfall.
+These checks prepare an association study; they do not establish a weather effect.
 
 ## Prior → likelihood → posterior → prediction
 
